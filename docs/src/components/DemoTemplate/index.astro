@@ -1,0 +1,17 @@
+---
+import { getDemoCode } from '../../utils';
+import { Code } from 'astro:components';
+const { path } = Astro.props;
+const pathArr = path.split('///')[1].split('/');
+pathArr.splice(pathArr.length - 1, 0, 'demos');
+const res = pathArr.join('/').replace('.mdx', '.tsx');
+const demoCode = getDemoCode(res);
+---
+
+<h2>Demo</h2>
+<div class='p-2 bg-black rounded-lg'>
+  <slot />
+</div>
+
+<h2>Code Example</h2>
+<Code code={demoCode} lang='ts' theme='dark-plus' />

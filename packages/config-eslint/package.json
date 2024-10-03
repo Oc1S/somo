@@ -1,0 +1,9 @@
+{
+  "name": "@repo/eslint-config",
+  "version": "0.0.0",
+  "private": true,
+  "main": "index.js",
+  "dependencies": {
+    "eslint-plugin-simple-import-sort": "^12.1.0"
+  }
+}
