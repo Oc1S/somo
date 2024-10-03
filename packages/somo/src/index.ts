@@ -1,1 +1,1 @@
-export * from './packages'
+export const hello = () => {};
