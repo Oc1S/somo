@@ -1,5 +1,12 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# IDEs and editors
+/.idea
+.project
+.classpath
+*.launch
+.settings/
+
 # dependencies
 node_modules
 .pnp
@@ -16,6 +23,8 @@ dist
 # misc
 .DS_Store
 *.pem
+# System Files
+Thumbs.db
 
 # debug
 npm-debug.log*
@@ -24,10 +33,7 @@ yarn-error.log*
 pnpm-debug.log*
 
 # local env files
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env*.local
 
 # turbo
 .turbo
@@ -37,3 +43,13 @@ tsup.config.bundled_*.{m,c,}s
 
 # generated types
 .astro/
+
+.solid
+.output
+.vercel
+.netlify
+.vinxi
+app.config.timestamp_*.js
+
+# Temp
+gitignore
