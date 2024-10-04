@@ -1,5 +1,3 @@
-import { memo } from "../../../utils/memo"
+import { memo } from '../../../utils/memo';
 
-export const supportsScrollTimeline = memo(
-    () => window.ScrollTimeline !== undefined
-)
+export const supportsScrollTimeline = memo(() => window.ScrollTimeline !== undefined);
