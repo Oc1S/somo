@@ -1,11 +1,11 @@
-"use client"
+import { createSignal, onMount } from 'solid-js';
 
-import { useEffect, useRef, useState } from "react"
-import { LazyContext } from "../../context/LazyContext"
-import { loadFeatures } from "../../motion/features/load-features"
-import { FeatureBundle, LazyFeatureBundle } from "../../motion/features/types"
-import { CreateVisualElement } from "../../render/types"
-import { LazyProps } from "./types"
+import { LazyContext } from '../../context/LazyContext';
+import { loadFeatures } from '../../motion/features/load-features';
+import { FeatureBundle, LazyFeatureBundle } from '../../motion/features/types';
+import { CreateVisualElement } from '../../render/types';
+import { createRef } from '../../utils/create-ref';
+import { LazyProps } from './types';
 
 /**
  * Used in conjunction with the `m` component to reduce bundle size.
@@ -43,41 +43,35 @@ import { LazyProps } from "./types"
  * @public
  */
 export function LazyMotion({ children, features, strict = false }: LazyProps) {
-    const [, setIsLoaded] = useState(!isLazyBundle(features))
-    const loadedRenderer = useRef<undefined | CreateVisualElement<any>>(
-        undefined
-    )
+  const [, setIsLoaded] = createSignal(!isLazyBundle(features));
+  const loadedRenderer = createRef<undefined | CreateVisualElement<any>>(undefined);
 
-    /**
-     * If this is a synchronous load, load features immediately
-     */
-    if (!isLazyBundle(features)) {
-        const { renderer, ...loadedFeatures } = features
-        loadedRenderer.current = renderer
-        loadFeatures(loadedFeatures)
+  /**
+   * If this is a synchronous load, load features immediately
+   */
+  if (!isLazyBundle(features)) {
+    const { renderer, ...loadedFeatures } = features;
+    loadedRenderer.current = renderer;
+    loadFeatures(loadedFeatures);
+  }
+
+  onMount(() => {
+    if (isLazyBundle(features)) {
+      features().then(({ renderer, ...loadedFeatures }) => {
+        loadFeatures(loadedFeatures);
+        loadedRenderer.current = renderer;
+        setIsLoaded(true);
+      });
     }
+  });
 
-    useEffect(() => {
-        if (isLazyBundle(features)) {
-            features().then(({ renderer, ...loadedFeatures }) => {
-                loadFeatures(loadedFeatures)
-                loadedRenderer.current = renderer
-                setIsLoaded(true)
-            })
-        }
-    }, [])
-
-    return (
-        <LazyContext.Provider
-            value={{ renderer: loadedRenderer.current, strict }}
-        >
-            {children}
-        </LazyContext.Provider>
-    )
+  return (
+    <LazyContext.Provider value={{ renderer: loadedRenderer.current, strict }}>
+      {children}
+    </LazyContext.Provider>
+  );
 }
 
-function isLazyBundle(
-    features: FeatureBundle | LazyFeatureBundle
-): features is LazyFeatureBundle {
-    return typeof features === "function"
+function isLazyBundle(features: FeatureBundle | LazyFeatureBundle): features is LazyFeatureBundle {
+  return typeof features === 'function';
 }

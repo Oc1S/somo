@@ -1,7 +1,7 @@
 {
   "name": "somo",
   "version": "0.0.0",
-  "description": "SolidJS utilities",
+  "description": "SolidJS Motion",
   "license": "MIT",
   "author": "Oc1s",
   "repository": {
@@ -49,6 +49,9 @@
     "update-deps": "pnpm up -Li"
   },
   "dependencies": {
+    "@motionone/dom": "^10.18.0",
+    "@solid-primitives/refs": "^1.0.8",
+    "@solid-primitives/transition-group": "^1.0.5",
     "lodash-es": "^4.17.21"
   },
   "devDependencies": {

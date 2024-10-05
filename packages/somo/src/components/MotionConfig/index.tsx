@@ -1,17 +1,12 @@
-"use client"
+import { createMemo, JSXElement, on, useContext } from 'solid-js';
 
-import * as React from "react"
-import { useContext, useMemo } from "react"
-import { MotionConfigContext } from "../../context/MotionConfigContext"
-import {
-    loadExternalIsValidProp,
-    IsValidProp,
-} from "../../render/dom/utils/filter-props"
-import { useConstant } from "../../utils/use-constant"
+import { MotionConfigContext } from '../../context/MotionConfigContext';
+import { IsValidProp, loadExternalIsValidProp } from '../../render/dom/utils/filter-props';
+import { useConstant } from '../../utils/use-constant';
 
 export interface MotionConfigProps extends Partial<MotionConfigContext> {
-    children?: React.ReactNode
-    isValidProp?: IsValidProp
+  children?: JSXElement;
+  isValidProp?: IsValidProp;
 }
 
 /**
@@ -31,40 +26,38 @@ export interface MotionConfigProps extends Partial<MotionConfigContext> {
  *
  * @public
  */
-export function MotionConfig({
-    children,
-    isValidProp,
-    ...config
-}: MotionConfigProps) {
-    isValidProp && loadExternalIsValidProp(isValidProp)
+export function MotionConfig({ children, isValidProp, ...config }: MotionConfigProps) {
+  isValidProp && loadExternalIsValidProp(isValidProp);
 
-    /**
-     * Inherit props from any parent MotionConfig components
-     */
-    config = { ...useContext(MotionConfigContext), ...config }
+  /**
+   * Inherit props from any parent MotionConfig components
+   */
+  config = { ...useContext(MotionConfigContext), ...config };
 
-    /**
-     * Don't allow isStatic to change between renders as it affects how many hooks
-     * motion components fire.
-     */
-    config.isStatic = useConstant(() => config.isStatic)
+  /**
+   * Don't allow isStatic to change between renders as it affects how many hooks
+   * motion components fire.
+   */
+  config.isStatic = useConstant(() => config.isStatic);
 
-    /**
-     * Creating a new config context object will re-render every `motion` component
-     * every time it renders. So we only want to create a new one sparingly.
-     */
-    const context = useMemo(
-        () => config,
-        [
-            JSON.stringify(config.transition),
-            config.transformPagePoint,
-            config.reducedMotion,
-        ]
-    )
+  /**
+   * Creating a new config context object will re-render every `motion` component
+   * every time it renders. So we only want to create a new one sparingly.
+   */
+  const context = createMemo(
+    on(
+      [
+        () => JSON.stringify(config.transition),
+        () => config.transformPagePoint,
+        () => config.reducedMotion,
+      ],
+      () => config,
+    ),
+  );
 
-    return (
-        <MotionConfigContext.Provider value={context as MotionConfigContext}>
-            {children}
-        </MotionConfigContext.Provider>
-    )
+  return (
+    <MotionConfigContext.Provider value={context() as MotionConfigContext}>
+      {children}
+    </MotionConfigContext.Provider>
+  );
 }

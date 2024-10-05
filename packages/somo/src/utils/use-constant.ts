@@ -1,6 +1,6 @@
-import { useRef } from "react"
+import { createRef } from './create-ref';
 
-type Init<T> = () => T
+type Init<T> = () => T;
 
 /**
  * Creates a constant value over the lifecycle of a component.
@@ -10,11 +10,11 @@ type Init<T> = () => T
  * you can ensure that initialisers don't execute twice or more.
  */
 export function useConstant<T>(init: Init<T>) {
-    const ref = useRef<T | null>(null)
+  const ref = createRef<T | null>(null);
 
-    if (ref.current === null) {
-        ref.current = init()
-    }
+  if (ref.current === null) {
+    ref.current = init();
+  }
 
-    return ref.current
+  return ref.current;
 }

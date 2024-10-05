@@ -1,8 +1,5 @@
-"use client"
+import { createContext } from 'solid-js';
 
-import { createContext } from "react"
-import { ReorderContextProps } from "../components/Reorder/types"
+import { ReorderContextProps } from '../components/Reorder/types';
 
-export const ReorderContext = createContext<ReorderContextProps<any> | null>(
-    null
-)
+export const ReorderContext = createContext<ReorderContextProps<any> | null>(null);

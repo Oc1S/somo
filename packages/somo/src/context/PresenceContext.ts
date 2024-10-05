@@ -1,21 +1,20 @@
-"use client"
+import { createContext } from 'solid-js';
 
-import { createContext } from "react"
-import { VariantLabels } from "../motion/types"
+import { VariantLabels } from '../motion/types';
 
 /**
  * @public
  */
 export interface PresenceContextProps {
-    id: string
-    isPresent: boolean
-    register: (id: string | number) => () => void
-    onExitComplete?: (id: string | number) => void
-    initial?: false | VariantLabels
-    custom?: any
+  id: string;
+  isPresent: boolean;
+  register: (id: string | number) => () => void;
+  onExitComplete?: (id: string | number) => void;
+  initial?: false | VariantLabels;
+  custom?: any;
 }
 
 /**
  * @public
  */
-export const PresenceContext = createContext<PresenceContextProps | null>(null)
+export const PresenceContext = createContext<PresenceContextProps | null>(null);

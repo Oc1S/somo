@@ -2,7 +2,7 @@
   "root": true,
   "compilerOptions": {
     "allowJs": true,
-    "strict": true,
+    // "strict": true,
     "target": "ESNext",
     "module": "ESNext",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
@@ -17,6 +17,9 @@
     "noUncheckedIndexedAccess": false,
     "strictNullChecks": true,
     "suppressImplicitAnyIndexErrors": false,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "noImplicitUseStrict": false,
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
     "types": [],

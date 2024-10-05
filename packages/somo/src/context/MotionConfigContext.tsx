@@ -1,5 +1,3 @@
-'use client';
-
 import { createContext } from 'solid-js';
 
 import { TransformPoint } from '../projection/geometry/types';

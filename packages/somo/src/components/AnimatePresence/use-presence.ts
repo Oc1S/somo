@@ -1,16 +1,14 @@
-import { useCallback, useContext, useEffect, useId } from "react"
-import {
-    PresenceContext,
-    PresenceContextProps,
-} from "../../context/PresenceContext"
+import { createUniqueId, onMount, useContext } from 'solid-js';
 
-export type SafeToRemove = () => void
+import { PresenceContext, PresenceContextProps } from '../../context/PresenceContext';
 
-type AlwaysPresent = [true, null]
+export type SafeToRemove = () => void;
 
-type Present = [true]
+type AlwaysPresent = [true, null];
 
-type NotPresent = [false, SafeToRemove]
+type Present = [true];
+
+type NotPresent = [false, SafeToRemove];
 
 /**
  * When a component is the child of `AnimatePresence`, it can use `usePresence`
@@ -36,21 +34,21 @@ type NotPresent = [false, SafeToRemove]
  * @public
  */
 export function usePresence(): AlwaysPresent | Present | NotPresent {
-    const context = useContext(PresenceContext)
+  const context = useContext(PresenceContext);
 
-    if (context === null) return [true, null]
+  if (context === null) return [true, null];
 
-    const { isPresent, onExitComplete, register } = context
+  const { isPresent, onExitComplete, register } = context;
 
-    // It's safe to call the following hooks conditionally (after an early return) because the context will always
-    // either be null or non-null for the lifespan of the component.
+  // It's safe to call the following hooks conditionally (after an early return) because the context will always
+  // either be null or non-null for the lifespan of the component.
 
-    const id = useId()
-    useEffect(() => register(id), [])
+  const id = createUniqueId();
+  onMount(() => register(id));
 
-    const safeToRemove = useCallback(() => onExitComplete && onExitComplete(id), [id, onExitComplete])
+  const safeToRemove = () => onExitComplete?.(id);
 
-    return !isPresent && onExitComplete ? [false, safeToRemove] : [true]
+  return !isPresent && onExitComplete ? [false, safeToRemove] : [true];
 }
 
 /**
@@ -74,9 +72,9 @@ export function usePresence(): AlwaysPresent | Present | NotPresent {
  * @public
  */
 export function useIsPresent() {
-    return isPresent(useContext(PresenceContext))
+  return isPresent(useContext(PresenceContext));
 }
 
 export function isPresent(context: PresenceContextProps | null) {
-    return context === null ? true : context.isPresent
+  return context === null ? true : context.isPresent;
 }
