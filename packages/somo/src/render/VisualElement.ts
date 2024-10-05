@@ -351,7 +351,7 @@ export abstract class VisualElement<
      * Doing so will break some tests but this isn't necessarily a breaking change,
      * more a reflection of the test.
      */
-    const { willChange, ...initialMotionValues } = this.scrapeMotionValuesFromProps(
+    const { willChange: _willChange, ...initialMotionValues } = this.scrapeMotionValuesFromProps(
       props,
       {},
       this,

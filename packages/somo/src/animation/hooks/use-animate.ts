@@ -1,19 +1,19 @@
-import { useConstant } from "../../utils/use-constant"
-import { useUnmountEffect } from "../../utils/use-unmount-effect"
-import { createScopedAnimate } from "../animate"
-import { AnimationScope } from "../types"
+import { useConstant } from '../../utils/use-constant';
+import { useUnmountEffect } from '../../utils/use-unmount-effect';
+import { createScopedAnimate } from '../animate';
+import { AnimationScope } from '../types';
 
 export function useAnimate<T extends Element = any>() {
-    const scope: AnimationScope<T> = useConstant(() => ({
-        current: null!, // Will be hydrated by React
-        animations: [],
-    }))
+  const scope: AnimationScope<T> = useConstant(() => ({
+    current: null!, // Will be hydrated
+    animations: [],
+  }));
 
-    const animate = useConstant(() => createScopedAnimate(scope))
+  const animate = useConstant(() => createScopedAnimate(scope));
 
-    useUnmountEffect(() => {
-        scope.animations.forEach((animation) => animation.stop())
-    })
+  useUnmountEffect(() => {
+    scope.animations.forEach(animation => animation.stop());
+  });
 
-    return [scope, animate] as [AnimationScope<T>, typeof animate]
+  return [scope, animate] as [AnimationScope<T>, typeof animate];
 }

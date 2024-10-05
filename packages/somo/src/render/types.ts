@@ -1,3 +1,5 @@
+import { ParentComponent } from 'solid-js';
+
 import { AnimationDefinition } from '../animation/types';
 import { ReducedMotionConfig } from '../context/MotionConfigContext';
 import { PresenceContextProps } from '../context/PresenceContext';
@@ -133,6 +135,6 @@ export interface AnimationLifecycles {
 export type EventProps = LayoutLifecycles & AnimationLifecycles;
 
 export type CreateVisualElement<Instance> = (
-  Component: string | React.ComponentType<React.PropsWithChildren<unknown>>,
+  Component: string | ParentComponent<object>,
   options: VisualElementOptions<Instance>,
 ) => VisualElement<Instance>;

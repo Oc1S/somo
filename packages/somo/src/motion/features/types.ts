@@ -1,4 +1,4 @@
-import Solid, { ParentProps, Ref } from 'solid-js';
+import { Component as SolidComponent, ParentProps, Ref } from 'solid-js';
 
 import { CreateVisualElement } from '../../render/types';
 import { VisualElement } from '../../render/VisualElement';
@@ -58,7 +58,7 @@ export interface FeatureBundle extends FeaturePackages {
 export type LazyFeatureBundle = () => Promise<FeatureBundle>;
 
 export type RenderComponent<Instance, RenderState> = (
-  Component: string | Solid.Component<ParentProps<object>>,
+  Component: string | SolidComponent<ParentProps<object>>,
   props: MotionProps,
   ref: Ref<Instance>,
   visualState: VisualState<Instance, RenderState>,

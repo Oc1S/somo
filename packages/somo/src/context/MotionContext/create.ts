@@ -1,24 +1,10 @@
-import { useContext, useMemo } from "react"
-import { MotionContext, MotionContextProps } from "."
-import { MotionProps } from "../../motion/types"
-import { getCurrentTreeVariants } from "./utils"
+import { useContext } from 'solid-js';
 
-export function useCreateMotionContext<Instance>(
-    props: MotionProps
-): MotionContextProps<Instance> {
-    const { initial, animate } = getCurrentTreeVariants(
-        props,
-        useContext(MotionContext)
-    )
+import { MotionProps } from '../../motion/types';
+import { MotionContext, MotionContextProps } from '.';
+import { getCurrentTreeVariants } from './utils';
 
-    return useMemo(
-        () => ({ initial, animate }),
-        [variantLabelsAsDependency(initial), variantLabelsAsDependency(animate)]
-    )
-}
-
-function variantLabelsAsDependency(
-    prop: undefined | string | string[] | boolean
-) {
-    return Array.isArray(prop) ? prop.join(" ") : prop
+export function useCreateMotionContext<Instance>(props: MotionProps): MotionContextProps<Instance> {
+  const { initial, animate } = getCurrentTreeVariants(props, useContext(MotionContext));
+  return { initial, animate };
 }

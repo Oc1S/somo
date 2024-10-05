@@ -1,88 +1,84 @@
-import { useState, useLayoutEffect } from "react"
-import { useConstant } from "../../utils/use-constant"
-import { TargetAndTransition } from "../../types"
-import { ResolvedValues } from "../../render/types"
-import { makeUseVisualState } from "../../motion/utils/use-visual-state"
-import { createBox } from "../../projection/geometry/models"
-import { VisualElement } from "../../render/VisualElement"
-import { animateVisualElement } from "../interfaces/visual-element"
+import { createEffect, createSignal, on, onCleanup } from 'solid-js';
+
+import { makeUseVisualState } from '../../motion/utils/use-visual-state';
+import { createBox } from '../../projection/geometry/models';
+import { ResolvedValues } from '../../render/types';
+import { VisualElement } from '../../render/VisualElement';
+import { TargetAndTransition } from '../../types';
+import { useConstant } from '../../utils/use-constant';
+import { animateVisualElement } from '../interfaces/visual-element';
 
 interface AnimatedStateOptions {
-    initialState: ResolvedValues
+  initialState: ResolvedValues;
 }
 
-const createObject = () => ({})
+const createObject = () => ({});
 
-class StateVisualElement extends VisualElement<
-    ResolvedValues,
-    {},
-    AnimatedStateOptions
-> {
-    type: "state"
-    build() {}
-    measureInstanceViewportBox = createBox
-    resetTransform() {}
-    restoreTransform() {}
-    removeValueFromRenderState() {}
-    renderInstance() {}
-    scrapeMotionValuesFromProps() {
-        return createObject()
-    }
-    getBaseTargetFromProps() {
-        return undefined
-    }
+class StateVisualElement extends VisualElement<ResolvedValues, {}, AnimatedStateOptions> {
+  type: 'state';
+  build() {}
+  measureInstanceViewportBox = createBox;
+  resetTransform() {}
+  restoreTransform() {}
+  removeValueFromRenderState() {}
+  renderInstance() {}
+  scrapeMotionValuesFromProps() {
+    return createObject();
+  }
+  getBaseTargetFromProps() {
+    return undefined;
+  }
 
-    readValueFromInstance(
-        _state: ResolvedValues,
-        key: string,
-        options: AnimatedStateOptions
-    ) {
-        return options.initialState[key] || 0
-    }
+  readValueFromInstance(_state: ResolvedValues, key: string, options: AnimatedStateOptions) {
+    return options.initialState[key] || 0;
+  }
 
-    sortInstanceNodePosition() {
-        return 0
-    }
+  sortInstanceNodePosition() {
+    return 0;
+  }
 }
 
 const useVisualState = makeUseVisualState({
-    scrapeMotionValuesFromProps: createObject,
-    createRenderState: createObject,
-})
+  scrapeMotionValuesFromProps: createObject,
+  createRenderState: createObject,
+});
 
 /**
  * This is not an officially supported API and may be removed
  * on any version.
  */
 export function useAnimatedState(initialState: any) {
-    const [animationState, setAnimationState] = useState(initialState)
-    const visualState = useVisualState({}, false)
+  const [animationState, setAnimationState] = createSignal(initialState);
+  const visualState = useVisualState({}, false);
 
-    const element = useConstant(() => {
-        return new StateVisualElement(
-            {
-                props: {
-                    onUpdate: (v) => {
-                        setAnimationState({ ...v })
-                    },
-                },
-                visualState,
-                presenceContext: null,
-            },
-            { initialState }
-        )
-    })
+  const element = useConstant(() => {
+    return new StateVisualElement(
+      {
+        props: {
+          onUpdate: v => {
+            setAnimationState({ ...v });
+          },
+        },
+        visualState,
+        presenceContext: null,
+      },
+      { initialState },
+    );
+  });
 
-    useLayoutEffect(() => {
-        element.mount({})
-        return () => element.unmount()
-    }, [element])
+  createEffect(
+    on(
+      () => element,
+      () => {
+        element.mount({});
+        onCleanup(() => element.unmount());
+      },
+    ),
+  );
 
-    const startAnimation = useConstant(
-        () => (animationDefinition: TargetAndTransition) => {
-            return animateVisualElement(element, animationDefinition)
-        }
-    )
+  const startAnimation = useConstant(() => (animationDefinition: TargetAndTransition) => {
+    return animateVisualElement(element, animationDefinition);
+  });
 
-    return [animationState, startAnimation]
+  return [animationState, startAnimation];
 }

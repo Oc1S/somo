@@ -8,9 +8,8 @@ import type { createMotionComponent } from './motion/create';
  * incorrect relative paths in the exported types and API Extractor throws
  * a wobbly.
  */
-export type CustomDomComponent<Props> = React.ForwardRefExoticComponent<
-  React.PropsWithoutRef<Props & MotionProps> & React.RefAttributes<SVGElement | HTMLElement>
->;
+export type CustomDomComponent<Props> = any;
+// React.PropsWithoutRef<Props & MotionProps> & React.RefAttributes<SVGElement | HTMLElement>
 
 export function createDOMMotionComponentProxy(componentFactory: typeof createMotionComponent) {
   type MotionProxy = typeof componentFactory &

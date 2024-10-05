@@ -1,53 +1,47 @@
-import { ResolvedValues } from "../types"
-import { SVGAttributes } from "react"
-import { MakeMotion, MotionProps } from "../../motion/types"
-import { SVGElements } from "./supported-elements"
-import { ForwardRefComponent, HTMLRenderState } from "../html/types"
+import { Component, JSX } from 'solid-js';
+
+import { MakeMotion, MotionProps } from '../../motion/types';
+import { HTMLRenderState } from '../html/types';
+import { ResolvedValues } from '../types';
+import { SVGElements } from './supported-elements';
+
+type SVGAttributes<T> = JSX.SvgSVGAttributes<T>;
 
 export interface SVGRenderState extends HTMLRenderState {
-    /**
-     * Measured dimensions of the SVG element to be used to calculate a transform-origin.
-     */
-    dimensions?: SVGDimensions
+  /**
+   * Measured dimensions of the SVG element to be used to calculate a transform-origin.
+   */
+  dimensions?: SVGDimensions;
 
-    /**
-     * A mutable record of attributes we want to apply directly to the rendered Element
-     * every frame. We use a mutable data structure to reduce GC during animations.
-     */
-    attrs: ResolvedValues
+  /**
+   * A mutable record of attributes we want to apply directly to the rendered Element
+   * every frame. We use a mutable data structure to reduce GC during animations.
+   */
+  attrs: ResolvedValues;
 }
 
 export type SVGDimensions = {
-    x: number
-    y: number
-    width: number
-    height: number
-}
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};
 
 interface SVGAttributesWithoutMotionProps<T>
-    extends Pick<
-        SVGAttributes<T>,
-        Exclude<keyof SVGAttributes<T>, keyof MotionProps>
-    > {}
+  extends Pick<SVGAttributes<T>, Exclude<keyof SVGAttributes<T>, keyof MotionProps>> {}
 
 /**
  * Blanket-accept any SVG attribute as a `MotionValue`
  * @public
  */
-export type SVGAttributesAsMotionValues<T> = MakeMotion<
-    SVGAttributesWithoutMotionProps<T>
->
+export type SVGAttributesAsMotionValues<T> = MakeMotion<SVGAttributesWithoutMotionProps<T>>;
 
-export type UnwrapSVGFactoryElement<F> = F extends React.SVGProps<infer P>
-    ? P
-    : never
+export type UnwrapSVGFactoryElement<F> = F extends SVGAttributes<infer P> ? P : never;
 
 /**
  * @public
  */
-export interface SVGMotionProps<T>
-    extends SVGAttributesAsMotionValues<T>,
-        MotionProps {}
+export interface SVGMotionProps<T> extends SVGAttributesAsMotionValues<T>, MotionProps {}
 
 /**
  * Motion-optimised versions of React's SVG components.
@@ -55,8 +49,8 @@ export interface SVGMotionProps<T>
  * @public
  */
 export type SVGMotionComponents = {
-    [K in SVGElements]: ForwardRefComponent<
-        UnwrapSVGFactoryElement<JSX.IntrinsicElements[K]>,
-        SVGMotionProps<UnwrapSVGFactoryElement<JSX.IntrinsicElements[K]>>
-    >
-}
+  [K in SVGElements]: Component<
+    UnwrapSVGFactoryElement<JSX.IntrinsicElements[K]> &
+      SVGMotionProps<UnwrapSVGFactoryElement<JSX.IntrinsicElements[K]>>
+  >;
+};

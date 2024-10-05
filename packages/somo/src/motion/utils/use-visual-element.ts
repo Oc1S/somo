@@ -1,27 +1,27 @@
-import * as React from 'react';
-import { useContext, useRef, useEffect, useInsertionEffect } from 'react';
-import { PresenceContext } from '../../context/PresenceContext';
-import { MotionProps } from '../../motion/types';
-import { MotionContext } from '../../context/MotionContext';
-import { CreateVisualElement } from '../../render/types';
-import { useIsomorphicLayoutEffect } from '../../utils/use-isomorphic-effect';
-import { VisualState } from './use-visual-state';
+import { createEffect, ParentComponent, useContext } from 'solid-js';
+
+import { optimizedAppearDataAttribute } from '../../animation/optimized-appear/data-id';
 import { LazyContext } from '../../context/LazyContext';
 import { MotionConfigContext } from '../../context/MotionConfigContext';
-import type { VisualElement } from '../../render/VisualElement';
-import { optimizedAppearDataAttribute } from '../../animation/optimized-appear/data-id';
-import { microtask } from '../../frameloop/microtask';
-import { IProjectionNode } from '../../projection/node/types';
-import { isRefObject } from '../../utils/is-ref-object';
+import { MotionContext } from '../../context/MotionContext';
+import { PresenceContext } from '../../context/PresenceContext';
 import {
   InitialPromotionConfig,
   SwitchLayoutGroupContext,
 } from '../../context/SwitchLayoutGroupContext';
+import { microtask } from '../../frameloop/microtask';
+import { MotionProps } from '../../motion/types';
+import { IProjectionNode } from '../../projection/node/types';
+import { CreateVisualElement } from '../../render/types';
+import type { VisualElement } from '../../render/VisualElement';
+import { createRef } from '../../utils/create-ref';
+import { isRefObject } from '../../utils/is-ref-object';
+import { VisualState } from './use-visual-state';
 
 let scheduleHandoffComplete = false;
 
 export function useVisualElement<Instance, RenderState>(
-  Component: string | React.ComponentType<React.PropsWithChildren<unknown>>,
+  Component: string | ParentComponent<object>,
   visualState: VisualState<Instance, RenderState>,
   props: MotionProps & Partial<MotionConfigContext>,
   createVisualElement?: CreateVisualElement<Instance>,
@@ -32,7 +32,7 @@ export function useVisualElement<Instance, RenderState>(
   const presenceContext = useContext(PresenceContext);
   const reducedMotionConfig = useContext(MotionConfigContext).reducedMotion;
 
-  const visualElementRef = useRef<VisualElement<Instance>>();
+  const visualElementRef = createRef<VisualElement<Instance>>();
 
   /**
    * If we haven't preloaded a renderer, check to see if we have one lazy-loaded
@@ -81,13 +81,13 @@ export function useVisualElement<Instance, RenderState>(
    * was present on initial render - it will be deleted after this.
    */
   const optimisedAppearId = props[optimizedAppearDataAttribute as keyof typeof props];
-  const wantsHandoff = useRef(
+  const wantsHandoff = createRef(
     Boolean(optimisedAppearId) &&
       !window.MotionHandoffIsComplete &&
       window.MotionHasOptimisedAnimation?.(optimisedAppearId),
   );
 
-  useIsomorphicLayoutEffect(() => {
+  createEffect(() => {
     if (!visualElement) return;
 
     visualElement.updateFeatures();
@@ -116,8 +116,7 @@ export function useVisualElement<Instance, RenderState>(
       visualElement.animationState.animateChanges();
     }
 
-    wantsHandoff.current = false;
-    // This ensures all future calls to animateChanges() will run in useEffect
+    wantsHandoff.current = false; // This ensures all future calls to animateChanges() will run in useEffect
     if (!scheduleHandoffComplete) {
       scheduleHandoffComplete = true;
       queueMicrotask(completeHandoff);

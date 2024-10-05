@@ -1,4 +1,3 @@
-import { useEffect, useLayoutEffect } from "react"
-import { isBrowser } from "./is-browser"
+import { createEffect } from 'solid-js';
 
-export const useIsomorphicLayoutEffect = isBrowser ? useLayoutEffect : useEffect
+export const useIsomorphicLayoutEffect = createEffect;

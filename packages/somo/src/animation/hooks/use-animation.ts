@@ -1,7 +1,8 @@
-import { animationControls } from "./animation-controls"
-import { AnimationControls } from "../types"
-import { useConstant } from "../../utils/use-constant"
-import { useIsomorphicLayoutEffect } from "../../utils/use-isomorphic-effect"
+import { onMount } from 'solid-js';
+
+import { useConstant } from '../../utils/use-constant';
+import { AnimationControls } from '../types';
+import { animationControls } from './animation-controls';
 
 /**
  * Creates `AnimationControls`, which can be used to manually start, stop
@@ -33,11 +34,11 @@ import { useIsomorphicLayoutEffect } from "../../utils/use-isomorphic-effect"
  * @public
  */
 export function useAnimationControls(): AnimationControls {
-    const controls = useConstant(animationControls)
+  const controls = useConstant(animationControls);
 
-    useIsomorphicLayoutEffect(controls.mount, [])
+  onMount(controls.mount);
 
-    return controls
+  return controls;
 }
 
-export const useAnimation = useAnimationControls
+export const useAnimation = useAnimationControls;

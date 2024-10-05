@@ -22,7 +22,7 @@
     "noImplicitUseStrict": false,
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
-    "types": [],
+    "types": ["node"],
     "baseUrl": ".",
     "paths": {}
   },

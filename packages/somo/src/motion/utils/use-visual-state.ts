@@ -1,18 +1,19 @@
-import { useContext } from 'react';
+import { useContext } from 'solid-js';
+
 import { isAnimationControls } from '../../animation/utils/is-animation-controls';
+import { MotionContext, MotionContextProps } from '../../context/MotionContext';
 import { PresenceContext, PresenceContextProps } from '../../context/PresenceContext';
 import { ResolvedValues, ScrapeMotionValuesFromProps } from '../../render/types';
-import { resolveVariantFromProps } from '../../render/utils/resolve-variants';
-import { useConstant } from '../../utils/use-constant';
-import { resolveMotionValue } from '../../value/utils/resolve-motion-value';
-import { MotionContext, MotionContextProps } from '../../context/MotionContext';
-import { MotionProps } from '../types';
 import {
   isControllingVariants as checkIsControllingVariants,
   isVariantNode as checkIsVariantNode,
 } from '../../render/utils/is-controlling-variants';
+import { resolveVariantFromProps } from '../../render/utils/resolve-variants';
 import { TargetAndTransition } from '../../types';
+import { useConstant } from '../../utils/use-constant';
 import { getWillChangeName } from '../../value/use-will-change/get-will-change-name';
+import { resolveMotionValue } from '../../value/utils/resolve-motion-value';
+import { MotionProps } from '../types';
 
 export interface VisualState<Instance, RenderState> {
   renderState: RenderState;
@@ -85,7 +86,7 @@ function forEachDefinition(
   for (let i = 0; i < list.length; i++) {
     const resolved = resolveVariantFromProps(props, list[i] as any);
     if (resolved) {
-      const { transitionEnd, transition, ...target } = resolved;
+      const { transitionEnd, transition: _transition, ...target } = resolved;
       callback(target, transitionEnd as ResolvedValues);
     }
   }
@@ -99,7 +100,7 @@ function makeLatestValues(
   scrapeMotionValues: ScrapeMotionValuesFromProps,
 ) {
   const values: ResolvedValues = {};
-  let applyWillChange = shouldApplyWillChange && props.style?.willChange === undefined;
+  let applyWillChange = shouldApplyWillChange && props.style?.['will-change'] === undefined;
 
   const motionValues = scrapeMotionValues(props, {});
   for (const key in motionValues) {
