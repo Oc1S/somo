@@ -22,5 +22,3 @@ import { motion } from 'somo';
 ```
 
 ## Road map
-
-TODO

@@ -38,7 +38,7 @@ export const PresenceContext = createContext<PresenceContextState>();
  */
 export const Presence: FlowComponent<{
   initial?: boolean;
-  exitBeforeEnter?: boolean;
+  mode?: 'parallel' | 'out-in' | 'in-out';
 }> = props => {
   const [mount, setMount] = createSignal(true),
     state = { initial: props.initial ?? true, mount },
@@ -49,19 +49,20 @@ export const Presence: FlowComponent<{
             resolveFirst(() => props.children),
             {
               appear: state.initial,
-              mode: props.exitBeforeEnter ? 'out-in' : 'parallel',
+              mode: props.mode,
+              onEnter(_, done) {
+                batch(() => {
+                  setMount(true);
+                  done();
+                });
+              },
               onExit(el, done) {
+                /* setMount & done */
                 batch(() => {
                   setMount(false);
                   mountedStates.get(el)?.getOptions().exit
                     ? el.addEventListener('motioncomplete', done)
                     : done();
-                });
-              },
-              onEnter(_, done) {
-                batch(() => {
-                  setMount(true);
-                  done();
                 });
               },
             },

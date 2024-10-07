@@ -11,32 +11,39 @@ export function createAndBindMotionState(
   presence_state?: PresenceContextState,
   parent_state?: MotionState,
 ): [MotionState, ReturnType<typeof createStyles>] {
-  const state = createMotionState(
+  const motionState = createMotionState(
     presence_state?.initial === false ? { ...options(), initial: false } : options(),
     parent_state,
   );
 
   createEffect(() => {
-    /*
-		Motion components under <Presence exitBeforeEnter> should wait before animating in
-		this is done with additional signal, because effects will still run immediately
-		*/
+    const target = motionState.getTarget();
+    console.log(target, createStyles(target), '@@');
+  });
+
+  createEffect(() => {
+    /* 
+    Motion components under <Presence exitBeforeEnter> should wait before animating in this is done with additional signal, because effects will still run immediately
+     */
     if (presence_state && !presence_state.mount()) return;
 
-    const el_ref = el(),
-      unmount = state.mount(el_ref);
+    const element = el(),
+      unmount = motionState.mount(element);
 
-    createEffect(() => state.update(options()));
+    /* 触发状态变化 */
+    createEffect(() => motionState.update(options()));
 
     onCleanup(() => {
+      /* 需要等到dom消失的情况 */
       if (presence_state && options().exit) {
-        state.setActive('exit', true);
-        el_ref.addEventListener('motioncomplete', unmount);
+        motionState.setActive('exit', true);
+        element.addEventListener('motioncomplete', unmount);
+        /* 直接调用motionState unmount */
       } else unmount();
     });
   });
 
-  return [state, createStyles(state.getTarget())] as const;
+  return [motionState, createStyles(motionState.getTarget())] as const;
 }
 
 /**

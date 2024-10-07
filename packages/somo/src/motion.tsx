@@ -19,19 +19,17 @@ const OPTION_KEYS = [
   'exit',
 ] as const;
 
-const ATTR_KEYS = ['tag'] as const;
+const EXCLUDE_KEYS = ['tag'] as const;
 
 export const ParentContext = createContext<MotionState>();
 
 /** @internal */
 export const MotionComponent = (
   props: MotionComponentProps & {
-    tag?: string;
     ref?: any;
-    style?: JSX.CSSProperties | string;
   },
 ): JSX.Element => {
-  const [options, , attrs] = splitProps(props, OPTION_KEYS, ATTR_KEYS);
+  const [options, , others] = splitProps(props, OPTION_KEYS, EXCLUDE_KEYS);
 
   const [state, style] = createAndBindMotionState(
     () => root,
@@ -44,7 +42,7 @@ export const MotionComponent = (
   return (
     <ParentContext.Provider value={state}>
       <Dynamic
-        {...attrs}
+        {...others}
         ref={(el: Element) => {
           root = el;
           props.ref?.(el);
@@ -85,5 +83,7 @@ export const MotionComponent = (
 export const Motion = new Proxy(MotionComponent, {
   get:
     (_, tag: string): MotionProxyComponent<any> =>
-    props => <MotionComponent {...props} tag={tag} />,
+    props => {
+      return <MotionComponent {...props} tag={tag} />;
+    },
 }) as MotionProxy;

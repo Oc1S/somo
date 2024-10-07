@@ -33,16 +33,31 @@ declare module '@motionone/dom' {
   }
 }
 
-export type MotionComponentProps = ParentProps<MotionEventHandlers & motionone.Options>;
+export type MotionComponentProps<T extends keyof JSX.IntrinsicElements = 'div'> = ParentProps<
+  MotionEventHandlers &
+    motionone.Options & {
+      tag?: string;
+      /* TODO: */
+      whileTap?: motionone.VariantDefinition;
+      whileFocus?: motionone.VariantDefinition;
+      whileHover?: motionone.VariantDefinition;
+      whileInView?: motionone.VariantDefinition;
+      whileDrag?: motionone.VariantDefinition;
+    } & JSX.IntrinsicElements[T]
+>;
 
-export type MotionComponent = {
-  // <Motion />
-  (props: JSX.IntrinsicElements['div'] & MotionComponentProps): JSX.Element;
-  // <Motion tag="div" />
-  <T extends keyof JSX.IntrinsicElements>(
-    props: JSX.IntrinsicElements[T] & MotionComponentProps & { tag: T },
-  ): JSX.Element;
-};
+// export type MotionComponent = {
+//   // <Motion />
+//   (props: JSX.IntrinsicElements['div'] & MotionComponentProps): JSX.Element;
+//   // <Motion tag="div" />
+//   <T extends keyof JSX.IntrinsicElements>(
+//     props: JSX.IntrinsicElements[T] & MotionComponentProps & { tag: T },
+//   ): JSX.Element;
+// };
+
+export type MotionComponent<T extends keyof JSX.IntrinsicElements = 'div'> = (
+  props: JSX.IntrinsicElements[T] & MotionComponentProps,
+) => JSX.Element;
 
 export type MotionProxyComponent<T> = (props: T & MotionComponentProps) => JSX.Element;
 
