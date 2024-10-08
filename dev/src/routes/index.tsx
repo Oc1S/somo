@@ -1,25 +1,14 @@
 import { batch, createSignal, Show } from 'solid-js';
 import { Motion, Presence } from 'somo';
 
+import { AutoAnimate } from '~/components';
+
 export default function Home() {
   const [visible, setVisible] = createSignal(true);
   const [count, setCount] = createSignal(0);
-  let domRef: HTMLDivElement;
 
   return (
-    <main
-      class="mx-auto p-4 text-center"
-      onClick={() => {
-        domRef.animate(
-          [{ transform: 'rotate(0) scale(1)' }, { transform: 'rotate(360deg) scale(0)' }],
-          {
-            duration: 1000,
-            iterations: 1,
-          },
-        );
-      }}
-    >
-      <div class="h-40 w-40 cursor-pointer rounded bg-red-900" ref={domRef!}></div>
+    <main class="mx-auto p-4 text-center">
       <Presence>
         <Show when={visible()}>
           <Motion
@@ -55,6 +44,7 @@ export default function Home() {
           />
         </Show>
       </Presence>
+      <AutoAnimate></AutoAnimate>
     </main>
   );
 }
