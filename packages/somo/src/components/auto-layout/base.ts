@@ -145,6 +145,7 @@ const handleResizes: ResizeObserverCallback = entries => {
  * Observe this elements position.
  * @param el - The element to observe the position of.
  */
+/* called by updatePos */
 function observePosition(el: Element) {
   const oldObserver = intersections.get(el);
   oldObserver?.disconnect();
@@ -250,30 +251,34 @@ function lowPriority(callback: CallableFunction) {
 /**
  * The mutation observer responsible for watching each root element.
  */
-let mutations: MutationObserver | undefined;
+let mutationObserver: MutationObserver | undefined;
 
 /**
  * A resize observer, responsible for recalculating elements on resize.
  */
-let resize: ResizeObserver | undefined;
+let resizeObserver: ResizeObserver | undefined;
 
 /**
  * Ensure the browser is supported.
  */
 const supportedBrowser = typeof window !== 'undefined' && 'ResizeObserver' in window;
 
+setInterval(() => {
+  console.log(enabled);
+}, 1000);
+
 /**
  * If this is in a browser, initialize our Web APIs
  */
 if (supportedBrowser) {
   root = document.documentElement;
-  mutations = new MutationObserver(handleMutations);
-  resize = new ResizeObserver(handleResizes);
+  mutationObserver = new MutationObserver(handleMutations);
+  resizeObserver = new ResizeObserver(handleResizes);
   window.addEventListener('scroll', () => {
     scrollY = window.scrollY;
     scrollX = window.scrollX;
   });
-  resize.observe(root);
+  resizeObserver.observe(root);
 }
 /**
  * Retrieves all the elements that may have been affected by the last mutation
@@ -784,7 +789,7 @@ export default function autoAnimate(
   el: HTMLElement,
   config: Partial<AutoAnimateOptions> | AutoAnimationPlugin = {},
 ): AnimationController {
-  if (mutations && resize) {
+  if (mutationObserver && resizeObserver) {
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     const isDisabledDueToReduceMotion =
       mediaQuery.matches && !isPlugin(config) && !config.disrespectUserMotionPreference;
@@ -793,13 +798,13 @@ export default function autoAnimate(
       if (getComputedStyle(el).position === 'static') {
         Object.assign(el.style, { position: 'relative' });
       }
-      forEach(el, updatePos, poll, element => resize?.observe(element));
+      forEach(el, updatePos, poll, element => resizeObserver?.observe(element));
       if (isPlugin(config)) {
         options.set(el, config);
       } else {
         options.set(el, { duration: 250, easing: 'ease-in-out', ...config });
       }
-      mutations.observe(el, { childList: true });
+      mutationObserver.observe(el, { childList: true });
       parents.add(el);
     }
   }

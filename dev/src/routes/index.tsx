@@ -25,7 +25,6 @@ export default function Home() {
             transition={{
               duration: 1,
               easing: 'ease-in-out',
-              repeat: 5,
             }}
             onClick={() => {
               batch(() => {
