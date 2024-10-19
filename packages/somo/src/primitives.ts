@@ -1,8 +1,8 @@
 import { Accessor, createEffect, onCleanup, useContext } from 'solid-js';
 import { createMotionState, createStyles, MotionState, style } from '@motionone/dom';
 
-import { PresenceContext, PresenceContextState } from './presence.jsx';
-import { Options } from './types.js';
+import { PresenceContext, PresenceContextState } from './components/presence.jsx';
+import { Options } from './types/types.js';
 
 /** @internal */
 export function createAndBindMotionState(

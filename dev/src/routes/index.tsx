@@ -1,8 +1,6 @@
 import { batch, createSignal, Show } from 'solid-js';
 import { Motion, Presence } from 'somo';
 
-import { AutoAnimate } from '~/components';
-
 export default function Home() {
   const [visible, setVisible] = createSignal(true);
   const [count, setCount] = createSignal(0);
@@ -21,11 +19,11 @@ export default function Home() {
             }}
             exit={{
               scale: 0,
+              transition: {
+                duration: 0.5,
+              },
             }}
-            transition={{
-              duration: 1,
-              easing: 'ease-in-out',
-            }}
+            transition={{}}
             onClick={() => {
               batch(() => {
                 setVisible(false);
@@ -43,7 +41,6 @@ export default function Home() {
           />
         </Show>
       </Presence>
-      <AutoAnimate></AutoAnimate>
     </main>
   );
 }

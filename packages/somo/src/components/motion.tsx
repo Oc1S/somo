@@ -3,20 +3,20 @@ import { Dynamic } from 'solid-js/web';
 import { combineStyle } from '@solid-primitives/props';
 import { MotionState } from '@motionone/dom';
 
+import { createAndBindMotionState } from '../primitives.js';
+import type { MotionComponentProps, MotionProxy, MotionProxyComponent } from '../types/types.js';
 import { PresenceContext } from './presence.jsx';
-import { createAndBindMotionState } from './primitives.js';
-import type { MotionComponentProps, MotionProxy, MotionProxyComponent } from './types.js';
 
 const OPTION_KEYS = [
   'initial',
   'animate',
+  'exit',
   'inView',
   'inViewOptions',
   'hover',
   'press',
   'variants',
   'transition',
-  'exit',
 ] as const;
 
 const EXCLUDE_KEYS = ['tag'] as const;
@@ -24,7 +24,7 @@ const EXCLUDE_KEYS = ['tag'] as const;
 export const ParentContext = createContext<MotionState>();
 
 /** @internal */
-export const MotionComponent = (
+const MotionComponent = (
   props: MotionComponentProps & {
     ref?: any;
   },

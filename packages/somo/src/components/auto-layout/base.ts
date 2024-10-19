@@ -263,10 +263,6 @@ let resizeObserver: ResizeObserver | undefined;
  */
 const supportedBrowser = typeof window !== 'undefined' && 'ResizeObserver' in window;
 
-setInterval(() => {
-  console.log(enabled);
-}, 1000);
-
 /**
  * If this is in a browser, initialize our Web APIs
  */
