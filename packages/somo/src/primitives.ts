@@ -1,45 +1,84 @@
-import { Accessor, createEffect, onCleanup, useContext } from 'solid-js';
+import { Accessor, createEffect, createMemo, onCleanup, useContext } from 'solid-js';
 import { createMotionState, createStyles, MotionState, style } from '@motionone/dom';
+import { KeyframeOptions } from '@motionone/types';
+import { isObject } from 'lodash-es';
 
 import { PresenceContext, PresenceContextState } from './components/presence.jsx';
+import { MotionConfig } from './context.js';
 import { Options } from './types/types.js';
+import { defaultTransitionKeys, defaultTransitions } from './utils/defaults.js';
+import { objectKeys } from './utils/helper.js';
 
 /** @internal */
 export function createAndBindMotionState(
   el: () => Element,
   options: Accessor<Options>,
-  presence_state?: PresenceContextState,
-  parent_state?: MotionState,
+  presenceState?: PresenceContextState,
+  parentState?: MotionState,
 ): [MotionState, ReturnType<typeof createStyles>] {
-  const motionState = createMotionState(
-    presence_state?.initial === false ? { ...options(), initial: false } : options(),
-    parent_state,
-  );
+  const contextConfig = useContext(MotionConfig);
 
-  createEffect(() => {
-    const target = motionState.getTarget();
-    console.log(target, createStyles(target), '@@');
+  const computedOptions = createMemo(() => {
+    const $options = { ...options() };
+    const keys = new Set<string>();
+    objectKeys($options).forEach(key => {
+      const variantDef = $options[key];
+      isObject(variantDef) &&
+        objectKeys(variantDef as object).forEach(k => {
+          keys.add(k);
+        });
+    });
+    console.log(keys);
+
+    const defaultTransition = [...keys].reduce(
+      (obj, key: keyof typeof defaultTransitions) => {
+        if (defaultTransitionKeys.has(key)) {
+          obj[key] = defaultTransitions[key]();
+        }
+        return obj;
+      },
+      {} as Record<string, KeyframeOptions>,
+    );
+
+    $options.transition = Object.assign(
+      {},
+      defaultTransition,
+      /* from context */
+      contextConfig.transition,
+      $options.transition ?? {},
+    );
+
+    console.log('transition@', defaultTransition, $options.transition);
+
+    return $options;
   });
+
+  const motionState = createMotionState(
+    presenceState?.initial === false ? { ...computedOptions(), initial: false } : computedOptions(),
+    parentState,
+  );
 
   createEffect(() => {
     /* 
     Motion components under <Presence exitBeforeEnter> should wait before animating in this is done with additional signal, because effects will still run immediately
      */
-    if (presence_state && !presence_state.mount()) return;
+    if (presenceState && !presenceState.mount()) return;
 
     const element = el(),
       unmount = motionState.mount(element);
 
     /* 触发状态变化 */
-    createEffect(() => motionState.update(options()));
+    createEffect(() => motionState.update(computedOptions()));
 
     onCleanup(() => {
       /* 需要等到dom消失的情况 */
-      if (presence_state && options().exit) {
+      if (presenceState && computedOptions().exit) {
         motionState.setActive('exit', true);
         element.addEventListener('motioncomplete', unmount);
+      } else {
         /* 直接调用motionState unmount */
-      } else unmount();
+        unmount();
+      }
     });
   });
 
