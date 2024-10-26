@@ -1,0 +1,84 @@
+{
+  "name": "@somo/shared",
+  "version": "0.0.0",
+  "description": "SolidJS Motion",
+  "license": "MIT",
+  "author": "Oc1s",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oc1s/somo.git"
+  },
+  "homepage": "https://github.com/oc1s/somo#readme",
+  "bugs": {
+    "url": "https://github.com/oc1s/somo/issues"
+  },
+  "files": [
+    "dist"
+  ],
+  "private": false,
+  "sideEffects": false,
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "browser": {},
+  "exports": {
+    "development": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/dev.js"
+      }
+    },
+    "import": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "typesVersions": {},
+  "scripts": {
+    "dev": "tsup --watch",
+    "build": "tsup",
+    "test": "concurrently pnpm:test:*",
+    "test:client": "vitest",
+    "test:ssr": "vitest --mode ssr",
+    "prepublishOnly": "npm run build",
+    "format": "prettier --ignore-path .gitignore -w \"src/**/*.{js,ts,json,css,tsx,jsx}\" \"docs/**/*.{js,ts,json,css,tsx,jsx}\"",
+    "lint": "concurrently pnpm:lint:*",
+    "lint:code": "eslint --ignore-path .gitignore --max-warnings 0 src/**/*.{js,ts,tsx,jsx}",
+    "lint:types": "tsc --noEmit",
+    "update-deps": "pnpm up -Li"
+  },
+  "dependencies": {
+    "lodash-es": "^4.17.21"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.4",
+    "@typescript-eslint/eslint-plugin": "^7.9.0",
+    "@typescript-eslint/parser": "^7.9.0",
+    "autoprefixer": "^10.4.19",
+    "esbuild": "^0.21.3",
+    "esbuild-plugin-solid": "^0.6.0",
+    "eslint-plugin-eslint-comments": "^3.2.0",
+    "eslint-plugin-no-only-tests": "^3.1.0",
+    "eslint-plugin-simple-import-sort": "^12.1.0",
+    "jsdom": "^24.0.0",
+    "postcss": "^8.4.38",
+    "solid-js": "^1.9.1",
+    "tsup": "^8.0.2",
+    "tsup-preset-solid": "^2.2.0",
+    "typescript": "^5.4.5",
+    "vite": "^5.2.11",
+    "vite-plugin-solid": "^2.10.2",
+    "vitest": "^1.6.0"
+  },
+  "peerDependencies": {
+    "solid-js": "^1.6.0"
+  },
+  "keywords": [
+    "solid",
+    "hooks"
+  ],
+  "engines": {
+    "node": ">=18"
+  }
+}

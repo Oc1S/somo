@@ -1,0 +1,32 @@
+{
+  "root": true,
+  "compilerOptions": {
+    "allowJs": true,
+    // "strict": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "noEmit": true,
+    "isolatedModules": true,
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "noUncheckedIndexedAccess": false,
+    "strictNullChecks": true,
+    "suppressImplicitAnyIndexErrors": false,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "noImplicitUseStrict": false,
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+    "types": ["node"],
+    "baseUrl": ".",
+    "paths": {}
+  },
+  "include": ["."],
+  "files": [".eslintrc.cjs"],
+  "exclude": ["node_modules", "dist"]
+}
