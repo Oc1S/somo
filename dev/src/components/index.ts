@@ -1,2 +1,2 @@
 export * from './auto-animate';
-export * from './somoto';
+export * from './somo';

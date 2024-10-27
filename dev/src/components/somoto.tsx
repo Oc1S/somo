@@ -1,5 +1,8 @@
-import { batch, createEffect, createSignal, Show } from 'solid-js';
-export const Toaster = () => {
-  createEffect(() => {});
-  return <div>Toast!</div>;
+import { Toaster } from 'somoto';
+export const Somoto = () => {
+  return (
+    <div>
+      <Toaster></Toaster>
+    </div>
+  );
 };

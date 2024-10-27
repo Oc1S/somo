@@ -1,5 +1,5 @@
 {
-  "name": "@somo/shared",
+  "name": "somo-shared",
   "version": "0.0.0",
   "description": "SolidJS Motion",
   "license": "MIT",

@@ -1,8 +1,8 @@
-import { createSignal, For, Index, Show } from 'solid-js';
-import { createAutoAnimate, Motion } from 'somo';
+import { createSignal, For, Show } from 'solid-js';
+import { createAutoAnimate } from 'somo';
 
 /* 目前只发现监听了childList变化的情况，resizeObserver待观察 */
-export const AutoAnimate = () => {
+export const AutoAnimateTest = () => {
   const [parent] = createAutoAnimate(/* optional config */);
 
   const [list, setList] = createSignal(['Home', 'Settings', 'Logout']);
