@@ -1,13 +1,13 @@
+import { JSX } from 'solid-js';
+
 import type {
   ExternalToast,
   PromiseData,
   PromiseT,
-  ToastType,
   ToastToDismiss,
+  ToastType,
   ToastTypes,
 } from './types';
-
-import React from 'react';
 
 let toastsCounter = 1;
 
@@ -41,14 +41,15 @@ class Observer {
 
   create = (
     data: ExternalToast & {
-      message?: string | React.ReactNode;
+      message?: JSX.Element;
       type?: ToastTypes;
       promise?: PromiseT;
-      jsx?: React.ReactElement;
+      jsx?: JSX.Element;
     },
   ) => {
     const { message, ...rest } = data;
-    const id = typeof data?.id === 'number' || data.id?.length > 0 ? data.id : toastsCounter++;
+    const id =
+      typeof data?.id === 'number' || (data.id?.length || 0) > 0 ? data.id : toastsCounter++;
     const alreadyExists = this.toasts.find(toast => {
       return toast.id === id;
     });
@@ -87,27 +88,27 @@ class Observer {
     return id;
   };
 
-  message = (message: string | React.ReactNode, data?: ExternalToast) => {
+  message = (message: JSX.Element, data?: ExternalToast) => {
     return this.create({ ...data, message });
   };
 
-  error = (message: string | React.ReactNode, data?: ExternalToast) => {
+  error = (message: JSX.Element, data?: ExternalToast) => {
     return this.create({ ...data, message, type: 'error' });
   };
 
-  success = (message: string | React.ReactNode, data?: ExternalToast) => {
+  success = (message: JSX.Element, data?: ExternalToast) => {
     return this.create({ ...data, type: 'success', message });
   };
 
-  info = (message: string | React.ReactNode, data?: ExternalToast) => {
+  info = (message: JSX.Element, data?: ExternalToast) => {
     return this.create({ ...data, type: 'info', message });
   };
 
-  warning = (message: string | React.ReactNode, data?: ExternalToast) => {
+  warning = (message: JSX.Element, data?: ExternalToast) => {
     return this.create({ ...data, type: 'warning', message });
   };
 
-  loading = (message: string | React.ReactNode, data?: ExternalToast) => {
+  loading = (message: JSX.Element, data?: ExternalToast) => {
     return this.create({ ...data, type: 'loading', message });
   };
 
@@ -195,7 +196,7 @@ class Observer {
     }
   };
 
-  custom = (jsx: (id: number | string) => React.ReactElement, data?: ExternalToast) => {
+  custom = (jsx: (id: number | string) => JSX.Element, data?: ExternalToast) => {
     const id = data?.id || toastsCounter++;
     this.create({ jsx: jsx(id), id, ...data });
     return id;
@@ -205,7 +206,7 @@ class Observer {
 export const ToastState = new Observer();
 
 // bind this to the toast function
-const toastFunction = (message: string | React.ReactNode, data?: ExternalToast) => {
+const toastFunction = (message: JSX.Element, data?: ExternalToast) => {
   const id = data?.id || toastsCounter++;
 
   ToastState.addToast({

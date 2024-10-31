@@ -140,7 +140,6 @@ export interface ToasterProps {
   icons?: ToastIcons;
   containerAriaLabel?: string;
   pauseWhenPageIsHidden?: boolean;
-  cn?: CnFunction;
   ref: Ref<HTMLElement>;
 }
 

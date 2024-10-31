@@ -1,13 +1,21 @@
 import './styles.css';
 
-import { createEffect, createMemo, createSignal, mergeProps, onCleanup } from 'solid-js';
+import { createEffect, createMemo, createSignal, mergeProps, onCleanup, Show } from 'solid-js';
 import { useIsMounted } from 'src/hooks/use-is-mounted';
 
 import { GAP, SWIPE_THRESHOLD, TIME_BEFORE_UNMOUNT, TOAST_LIFETIME } from '../constants';
 import { useIsDocumentHidden } from '../hooks/use-is-document-hidden';
-import { CloseIcon, getIcon, Loader } from '../icons';
 import { toast } from '../state';
-import { isAction, ToastClassnames, ToastIcons, type ToastProps, ToastTypes } from '../types';
+import {
+  Action,
+  isAction,
+  ToastClassnames,
+  ToastIcons,
+  type ToastProps,
+  ToastTypes,
+} from '../types';
+import { cx } from '../utils/cx';
+import { CloseIcon, getIcon, Loader } from './icons';
 
 export const Toast = (p: ToastProps) => {
   const props = mergeProps(
@@ -195,7 +203,7 @@ export const Toast = (p: ToastProps) => {
       role="status"
       tabIndex={0}
       ref={setToastElement}
-      class={props.cn(
+      class={cx(
         props.class,
         props.toast.className,
         props.classNames?.toast,
@@ -283,7 +291,7 @@ export const Toast = (p: ToastProps) => {
         }
       }}
     >
-      {closeButton() && !props.toast.jsx ? (
+      <Show when={closeButton() && !props.toast.jsx}>
         <button
           aria-label={props.closeButtonAriaLabel}
           data-disabled={disabled()}
@@ -296,98 +304,102 @@ export const Toast = (p: ToastProps) => {
                   props.toast.onDismiss?.(props.toast);
                 }
           }
-          class={props.cn(props.classNames?.closeButton, props.toast?.classNames?.closeButton)}
+          class={cx(props.classNames?.closeButton, props.toast?.classNames?.closeButton)}
         >
-          {props.icons?.close ?? CloseIcon}
+          <Show when={props.icons?.close} fallback={CloseIcon}>
+            {props.icons?.close}
+          </Show>
         </button>
-      ) : null}
-      {props.toast.jsx || props.toast.title ? (
-        props.toast.jsx || props.toast.title
-      ) : (
-        <>
-          {toastType() || props.toast.icon || props.toast.promise ? (
-            <div
-              data-icon=""
-              class={props.cn(props.classNames?.icon, props.toast?.classNames?.icon)}
-            >
-              {props.toast.promise || (toastType() === 'loading' && !props.toast.icon)
-                ? props.toast.icon || getLoadingIcon()
-                : null}
-              {toastType() !== 'loading'
-                ? props.toast.icon ||
-                  props.icons?.[toastType() as keyof ToastIcons] ||
-                  getIcon(toastType() as ToastTypes)
-                : null}
-            </div>
-          ) : null}
+      </Show>
 
-          <div
-            data-content=""
-            class={props.cn(props.classNames?.content, props.toast?.classNames?.content)}
-          >
-            <div
-              data-title=""
-              class={props.cn(props.classNames?.title, props.toast?.classNames?.title)}
-            >
-              {props.toast.title}
-            </div>
-            {props.toast.description ? (
-              <div
-                data-description=""
-                class={props.cn(
-                  props.descriptionClassName,
-                  props.toast.descriptionClassName,
-                  props.classNames?.description,
-                  props.toast?.classNames?.description,
-                )}
-              >
-                {props.toast.description}
+      <Show
+        when={props.toast.jsx || props.toast.title}
+        fallback={
+          <>
+            <Show when={toastType() || props.toast.icon || props.toast.promise}>
+              <div data-icon="" class={cx(props.classNames?.icon, props.toast?.classNames?.icon)}>
+                {props.toast.promise || (toastType() === 'loading' && !props.toast.icon)
+                  ? props.toast.icon || getLoadingIcon()
+                  : null}
+                {toastType() !== 'loading'
+                  ? props.toast.icon ||
+                    props.icons?.[toastType() as keyof ToastIcons] ||
+                    getIcon(toastType() as ToastTypes)
+                  : null}
               </div>
-            ) : null}
-          </div>
-          {props.toast.cancel ? (
-            props.toast.cancel
-          ) : props.toast.cancel && isAction(props.toast.cancel) ? (
-            <button
-              data-button
-              data-cancel
-              style={props.toast.cancelButtonStyle || props.cancelButtonStyle}
-              onClick={event => {
-                // We need to check twice because typescript
-                if (!isAction(props.toast.cancel)) return;
-                if (!dismissible()) return;
-                props.toast.cancel.onClick?.(event);
-                deleteToast();
-              }}
-              class={props.cn(
-                props.classNames?.cancelButton,
-                props.toast?.classNames?.cancelButton,
-              )}
+            </Show>
+
+            <div
+              data-content=""
+              class={cx(props.classNames?.content, props.toast?.classNames?.content)}
             >
-              {props.toast.cancel.label}
-            </button>
-          ) : null}
-          {props.toast.action ? (
-            props.toast.action
-          ) : props.toast.action && isAction(props.toast.action) ? (
-            <button
-              data-button
-              data-action
-              style={props.toast.actionButtonStyle || props.actionButtonStyle}
-              onClick={event => {
-                // We need to check twice because typescript
-                if (!isAction(props.toast.action)) return;
-                if (event.defaultPrevented) return;
-                props.toast.action.onClick?.(event);
-                deleteToast();
-              }}
-              class={props.cn(props.classNames?.actionButton, props.toast.classNames?.actionButton)}
+              <div
+                data-title=""
+                class={cx(props.classNames?.title, props.toast?.classNames?.title)}
+              >
+                {props.toast.title}
+              </div>
+              <Show when={props.toast.description}>
+                <div
+                  data-description=""
+                  class={cx(
+                    props.descriptionClassName,
+                    props.toast.descriptionClassName,
+                    props.classNames?.description,
+                    props.toast?.classNames?.description,
+                  )}
+                >
+                  {props.toast.description}
+                </div>
+              </Show>
+            </div>
+            {/* cancel */}
+            <Show
+              when={props.toast.cancel && isAction(props.toast.cancel)}
+              fallback={<Show when={props.toast.cancel}>{cancel => <>{cancel()}</>}</Show>}
             >
-              {props.toast.action.label}
-            </button>
-          ) : null}
-        </>
-      )}
+              <button
+                data-button
+                data-cancel
+                style={props.toast.cancelButtonStyle || props.cancelButtonStyle}
+                onClick={event => {
+                  // We need to check twice because typescript
+                  if (!isAction(props.toast.cancel)) return;
+                  if (!dismissible()) return;
+                  props.toast.cancel.onClick?.(event);
+                  deleteToast();
+                }}
+                class={cx(props.classNames?.cancelButton, props.toast?.classNames?.cancelButton)}
+              >
+                {(props.toast.cancel as Action).label}
+              </button>
+            </Show>
+            {/* action */}
+            <Show
+              when={props.toast.action && isAction(props.toast.action)}
+              fallback={<Show when={props.toast.action}>{action => <>{action()}</>}</Show>}
+            >
+              <button
+                data-button
+                data-action
+                style={props.toast.actionButtonStyle || props.actionButtonStyle}
+                onClick={event => {
+                  // We need to check twice because typescript
+                  if (!isAction(props.toast.action)) return;
+                  if (event.defaultPrevented) return;
+                  props.toast.action.onClick?.(event);
+                  deleteToast();
+                }}
+                class={cx(props.classNames?.actionButton, props.toast.classNames?.actionButton)}
+              >
+                {(props.toast.action as Action).label}
+              </button>
+            </Show>
+          </>
+        }
+      >
+        {props.toast.jsx || props.toast.title}
+      </Show>
     </li>
   );
 };

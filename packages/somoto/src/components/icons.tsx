@@ -1,6 +1,6 @@
 import { For, JSX } from 'solid-js';
 
-import type { ToastTypes } from './types';
+import type { ToastTypes } from '../types';
 
 export const getIcon = (type: ToastTypes): JSX.Element | null => {
   switch (type) {
