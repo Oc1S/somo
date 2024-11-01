@@ -220,6 +220,7 @@ const isHttpResponse = (data: any): data is Response => {
 
 const basicToast = (message: JSX.Element, data?: ExternalToast) => {
   const id = data?.id || toastsCounter++;
+  console.log('id', id);
   ToastState.addToast({
     title: message,
     ...data,
@@ -230,7 +231,7 @@ const basicToast = (message: JSX.Element, data?: ExternalToast) => {
 
 const getHistory = () => ToastState.toasts;
 
-// We use `Object.assign` to maintain the correct types as we would lose them otherwise
+// use `Object.assign` to maintain the correct types as we would lose them otherwise
 export const toast = Object.assign(
   basicToast,
   {

@@ -1,12 +1,22 @@
-import { onMount } from 'solid-js';
 import { toast, Toaster } from 'somoto';
+
 export const Somoto = () => {
-  onMount(() => {
-    toast('hi');
-  });
+  return (
+    <button
+      onClick={() => {
+        toast('Hello World!');
+      }}
+    >
+      Toast!
+    </button>
+  );
+};
+
+export default function SomotoTest() {
   return (
     <>
       <Toaster></Toaster>
+      <Somoto></Somoto>
     </>
   );
-};
+}

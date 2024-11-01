@@ -28,7 +28,6 @@ export function createAndBindMotionState(
           keys.add(k);
         });
     });
-    console.log(keys);
 
     const defaultTransition = [...keys].reduce(
       (obj, key: keyof typeof defaultTransitions) => {
@@ -47,9 +46,7 @@ export function createAndBindMotionState(
       contextConfig.transition,
       $options.transition ?? {},
     );
-
-    console.log('transition@', defaultTransition, $options.transition);
-
+    console.log('debug@transition', defaultTransition, $options.transition);
     return $options;
   });
 
