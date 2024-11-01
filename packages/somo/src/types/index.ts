@@ -34,8 +34,10 @@ declare module '@motionone/dom' {
 }
 
 export type MotionComponentProps<T extends keyof JSX.IntrinsicElements = 'div'> = ParentProps<
-  MotionEventHandlers &
+  JSX.IntrinsicElements[T] &
+    MotionEventHandlers &
     motionone.Options & {
+      ref?: any;
       tag?: string;
       /* TODO: */
       whileTap?: motionone.VariantDefinition;
@@ -43,7 +45,7 @@ export type MotionComponentProps<T extends keyof JSX.IntrinsicElements = 'div'> 
       whileHover?: motionone.VariantDefinition;
       whileInView?: motionone.VariantDefinition;
       whileDrag?: motionone.VariantDefinition;
-    } & JSX.IntrinsicElements[T]
+    }
 >;
 
 // export type MotionComponent = {

@@ -32,29 +32,25 @@ export const Toast = (p: ToastProps) => {
   const [swipeOut, setSwipeOut] = createSignal(false);
   const [offsetBeforeRemove, setOffsetBeforeRemove] = createSignal(0);
   const [initialHeight, setInitialHeight] = createSignal(0);
-
-  let dragStartTime: Date | null = null;
   const [toastElement, setToastElement] = createSignal<HTMLLIElement>();
-  // let toastRef: HTMLLIElement | undefined = undefined;
-  const isFront = props.index === 0;
-  const isVisible = props.index + 1 <= props.visibleToasts;
 
-  const toastType = createMemo(() => props.toast.type);
-  const dismissible = createMemo(() => props.toast.dismissible !== false);
+  const isFront = () => props.index === 0;
+  const isVisible = () => props.index + 1 <= props.visibleToasts;
+  const toastType = () => props.toast.type;
+  const dismissible = () => props.toast.dismissible !== false;
+  const closeButton = () => props.toast.closeButton ?? props.closeButton;
+  const duration = () => props.toast.duration || props.duration || TOAST_LIFETIME;
 
   // Height index is used to calculate the offset as it gets updated before the toast array, which means we can calculate the new layout faster.
   const heightIndex = createMemo(
     () => props.heights.findIndex(height => height.toastId === props.toast.id) || 0,
   );
-  const closeButton = createMemo(() => props.toast.closeButton ?? props.closeButton);
+  const position = createMemo(() => props.position.split('-'));
 
-  const duration = createMemo(() => props.toast.duration || props.duration || TOAST_LIFETIME);
-
+  let dragStartTime: Date | null = null;
   let closeTimerStartTimeRef = 0;
   let lastCloseTimerStartTimeRef = 0;
-
   let pointerStartRef: { x: number; y: number } | null = null;
-  const [y, x] = props.position.split('-');
 
   const toastsHeightBefore = createMemo(() => {
     return props.heights.reduce((prev, curr, reducerIndex) => {
@@ -62,7 +58,6 @@ export const Toast = (p: ToastProps) => {
       if (reducerIndex >= heightIndex()) {
         return prev;
       }
-
       return prev + curr.height;
     }, 0);
   });
@@ -218,17 +213,17 @@ export const Toast = (p: ToastProps) => {
       data-mounted={mounted()}
       data-promise={Boolean(toast.promise)}
       data-removed={removed()}
-      data-visible={isVisible}
-      data-y-position={y}
-      data-x-position={x}
+      data-visible={isVisible()}
+      data-y-position={position()[0]}
+      data-x-position={position()[1]}
       data-index={props.index}
-      data-front={isFront}
+      data-front={isFront()}
       data-swiping={swiping()}
       data-dismissible={dismissible()}
       data-type={toastType()}
-      data-invert={invert}
+      data-invert={invert()}
       data-swipe-out={swipeOut()}
-      data-expanded={Boolean(props.expanded || (props.expandByDefault && mounted))}
+      data-expanded={Boolean(props.expanded || (props.expandByDefault && mounted()))}
       style={{
         '--index': props.index,
         '--toasts-before': props.index,
@@ -276,7 +271,7 @@ export const Toast = (p: ToastProps) => {
         const yPosition = event.clientY - pointerStartRef.y;
         const xPosition = event.clientX - pointerStartRef.x;
 
-        const clamp = y === 'top' ? Math.min : Math.max;
+        const clamp = position()[0] === 'top' ? Math.min : Math.max;
         const clampedY = clamp(0, yPosition);
         const swipeStartThreshold = event.pointerType === 'touch' ? 10 : 2;
         const isAllowedToSwipe = Math.abs(clampedY) > swipeStartThreshold;
@@ -307,7 +302,7 @@ export const Toast = (p: ToastProps) => {
           class={cn(props.classNames?.closeButton, props.toast?.classNames?.closeButton)}
         >
           <Show when={props.icons?.close} fallback={CloseIcon}>
-            {props.icons?.close}
+            {closeElement => closeElement()}
           </Show>
         </button>
       </Show>

@@ -5,7 +5,7 @@ import { isObject } from 'lodash-es';
 
 import { PresenceContext, PresenceContextState } from './components/presence.jsx';
 import { MotionConfig } from './context.js';
-import { Options } from './types/types.js';
+import { Options } from './types/index.js';
 import { defaultTransitionKeys, defaultTransitions } from './utils/defaults.js';
 import { objectKeys } from './utils/helper.js';
 

@@ -4,7 +4,7 @@ import { combineStyle } from '@solid-primitives/props';
 import { MotionState } from '@motionone/dom';
 
 import { createAndBindMotionState } from '../primitives.js';
-import type { MotionComponentProps, MotionProxy, MotionProxyComponent } from '../types/types.js';
+import type { MotionComponentProps, MotionProxy, MotionProxyComponent } from '../types/index.js';
 import { PresenceContext } from './presence.jsx';
 
 const OPTION_KEYS = [
@@ -24,11 +24,7 @@ const EXCLUDE_KEYS = ['tag'] as const;
 export const ParentContext = createContext<MotionState>();
 
 /** @internal */
-const MotionComponent = (
-  props: MotionComponentProps & {
-    ref?: any;
-  },
-): JSX.Element => {
+const MotionComponent = (props: MotionComponentProps): JSX.Element => {
   const [options, , others] = splitProps(props, OPTION_KEYS, EXCLUDE_KEYS);
 
   const [state, style] = createAndBindMotionState(

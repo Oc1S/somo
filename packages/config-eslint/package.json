@@ -4,6 +4,10 @@
   "private": true,
   "main": "index.js",
   "dependencies": {
-    "eslint-plugin-simple-import-sort": "^12.1.0"
+    "@typescript-eslint/eslint-plugin": "^8.12.2",
+    "@typescript-eslint/parser": "^8.12.2",
+    "eslint-plugin-eslint-comments": "^3.2.0",
+    "eslint-plugin-no-only-tests": "^3.3.0",
+    "eslint-plugin-simple-import-sort": "^12.1.1"
   }
 }

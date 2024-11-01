@@ -9,6 +9,7 @@ const presetOptions: preset.PresetOptions = {
       entry: 'src/index.ts',
       // will generate a separate development entry
       dev_entry: true,
+      server_entry: true,
     },
   ],
   // Set to `true` to remove all `console.*` calls and `debugger` statements in prod builds
@@ -37,9 +38,5 @@ export default defineConfig(config => {
     preset.writePackageJson(packageFields);
   }
 
-  let options = preset.generateTsupOptions(parsedOptions);
-  options = options.map(option => ({
-    ...option,
-  }));
-  return options;
+  return preset.generateTsupOptions(parsedOptions);
 });

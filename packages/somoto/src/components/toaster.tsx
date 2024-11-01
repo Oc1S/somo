@@ -200,7 +200,9 @@ export const Toaster: Component<ToasterProps> = p => {
     <section
       aria-label={`${props.containerAriaLabel} ${hotkeyLabel()}`}
       tabIndex={-1}
-      ref={r => (props.ref = r)}
+      ref={r => {
+        props.ref = r;
+      }}
     >
       {possiblePositions().map((position, index) => {
         const [y, x] = position.split('-');
