@@ -21,9 +21,9 @@ const bars = Array(12).fill(0);
 
 export const Loader = ({ visible }: { visible: boolean }) => {
   return (
-    <div class="sonner-loading-wrapper" data-visible={visible}>
-      <div class="sonner-spinner">
-        <For each={bars}>{() => <div class="sonner-loading-bar" />}</For>
+    <div class="somoto-loading-wrapper" data-visible={visible}>
+      <div class="somoto-spinner">
+        <For each={bars}>{() => <div class="somoto-loading-bar" />}</For>
       </div>
     </div>
   );

@@ -169,7 +169,6 @@ export interface ToastProps {
   icons?: ToastIcons;
   closeButtonAriaLabel?: string;
   pauseWhenPageIsHidden: boolean;
-  cn: CnFunction;
   defaultRichColors?: boolean;
 }
 

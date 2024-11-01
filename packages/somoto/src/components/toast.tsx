@@ -1,10 +1,10 @@
 import './styles.css';
 
 import { createEffect, createMemo, createSignal, mergeProps, onCleanup, Show } from 'solid-js';
-import { useIsMounted } from 'src/hooks/use-is-mounted';
 
 import { GAP, SWIPE_THRESHOLD, TIME_BEFORE_UNMOUNT, TOAST_LIFETIME } from '../constants';
 import { useIsDocumentHidden } from '../hooks/use-is-document-hidden';
+import { useIsMounted } from '../hooks/use-is-mounted';
 import { toast } from '../state';
 import {
   Action,
@@ -14,7 +14,7 @@ import {
   type ToastProps,
   ToastTypes,
 } from '../types';
-import { cx } from '../utils/cx';
+import { cn } from '../utils/cn';
 import { CloseIcon, getIcon, Loader } from './icons';
 
 export const Toast = (p: ToastProps) => {
@@ -188,7 +188,7 @@ export const Toast = (p: ToastProps) => {
   function getLoadingIcon() {
     if (props.icons?.loading) {
       return (
-        <div class="sonner-loader" data-visible={toastType() === 'loading'}>
+        <div class="somoto-loader" data-visible={toastType() === 'loading'}>
           {props.icons.loading}
         </div>
       );
@@ -203,7 +203,7 @@ export const Toast = (p: ToastProps) => {
       role="status"
       tabIndex={0}
       ref={setToastElement}
-      class={cx(
+      class={cn(
         props.class,
         props.toast.className,
         props.classNames?.toast,
@@ -212,7 +212,7 @@ export const Toast = (p: ToastProps) => {
         props.classNames?.[toastType() as keyof ToastClassnames],
         props.toast?.classNames?.[toastType() as keyof ToastClassnames],
       )}
-      data-sonner-toast=""
+      data-somoto-toast=""
       data-rich-colors={props.toast.richColors ?? props.defaultRichColors}
       data-styled={!Boolean(props.toast.jsx || props.toast.unstyled || props.unstyled)}
       data-mounted={mounted()}
@@ -304,7 +304,7 @@ export const Toast = (p: ToastProps) => {
                   props.toast.onDismiss?.(props.toast);
                 }
           }
-          class={cx(props.classNames?.closeButton, props.toast?.classNames?.closeButton)}
+          class={cn(props.classNames?.closeButton, props.toast?.classNames?.closeButton)}
         >
           <Show when={props.icons?.close} fallback={CloseIcon}>
             {props.icons?.close}
@@ -317,32 +317,34 @@ export const Toast = (p: ToastProps) => {
         fallback={
           <>
             <Show when={toastType() || props.toast.icon || props.toast.promise}>
-              <div data-icon="" class={cx(props.classNames?.icon, props.toast?.classNames?.icon)}>
-                {props.toast.promise || (toastType() === 'loading' && !props.toast.icon)
-                  ? props.toast.icon || getLoadingIcon()
-                  : null}
-                {toastType() !== 'loading'
-                  ? props.toast.icon ||
+              <div data-icon="" class={cn(props.classNames?.icon, props.toast.classNames?.icon)}>
+                <Show
+                  when={props.toast.promise || (toastType() === 'loading' && !props.toast.icon)}
+                >
+                  {props.toast.icon || getLoadingIcon()}
+                </Show>
+                <Show when={toastType() !== 'loading'}>
+                  {props.toast.icon ||
                     props.icons?.[toastType() as keyof ToastIcons] ||
-                    getIcon(toastType() as ToastTypes)
-                  : null}
+                    getIcon(toastType() as ToastTypes)}
+                </Show>
               </div>
             </Show>
 
             <div
               data-content=""
-              class={cx(props.classNames?.content, props.toast?.classNames?.content)}
+              class={cn(props.classNames?.content, props.toast?.classNames?.content)}
             >
               <div
                 data-title=""
-                class={cx(props.classNames?.title, props.toast?.classNames?.title)}
+                class={cn(props.classNames?.title, props.toast?.classNames?.title)}
               >
                 {props.toast.title}
               </div>
               <Show when={props.toast.description}>
                 <div
                   data-description=""
-                  class={cx(
+                  class={cn(
                     props.descriptionClassName,
                     props.toast.descriptionClassName,
                     props.classNames?.description,
@@ -369,7 +371,7 @@ export const Toast = (p: ToastProps) => {
                   props.toast.cancel.onClick?.(event);
                   deleteToast();
                 }}
-                class={cx(props.classNames?.cancelButton, props.toast?.classNames?.cancelButton)}
+                class={cn(props.classNames?.cancelButton, props.toast?.classNames?.cancelButton)}
               >
                 {(props.toast.cancel as Action).label}
               </button>
@@ -390,7 +392,7 @@ export const Toast = (p: ToastProps) => {
                   props.toast.action.onClick?.(event);
                   deleteToast();
                 }}
-                class={cx(props.classNames?.actionButton, props.toast.classNames?.actionButton)}
+                class={cn(props.classNames?.actionButton, props.toast.classNames?.actionButton)}
               >
                 {(props.toast.action as Action).label}
               </button>

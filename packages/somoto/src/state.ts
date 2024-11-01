@@ -49,11 +49,13 @@ class Observer {
   ) => {
     const { message, ...rest } = data;
     const id =
-      typeof data?.id === 'number' || (data.id?.length || 0) > 0 ? data.id : toastsCounter++;
+      typeof data?.id === 'number' || (data.id?.length || 0) > 0
+        ? (data.id as string | number)
+        : toastsCounter++;
     const alreadyExists = this.toasts.find(toast => {
       return toast.id === id;
     });
-    const dismissible = data.dismissible === undefined ? true : data.dismissible;
+    const dismissible = data.dismissible ?? true;
 
     if (alreadyExists) {
       this.toasts = this.toasts.map(toast => {
@@ -208,7 +210,6 @@ export const ToastState = new Observer();
 // bind this to the toast function
 const toastFunction = (message: JSX.Element, data?: ExternalToast) => {
   const id = data?.id || toastsCounter++;
-
   ToastState.addToast({
     title: message,
     ...data,

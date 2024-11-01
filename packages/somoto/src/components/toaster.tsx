@@ -1,5 +1,3 @@
-import './styles.css';
-
 import {
   Component,
   createEffect,
@@ -10,54 +8,20 @@ import {
   onMount,
 } from 'solid-js';
 
-import { Toast } from './components/toast';
-import { GAP, TOAST_WIDTH, VIEWPORT_OFFSET, VISIBLE_TOASTS_AMOUNT } from './constants';
-import { toast, ToastState } from './state';
+import { GAP, TOAST_WIDTH, VIEWPORT_OFFSET, VISIBLE_TOASTS_AMOUNT } from '../constants';
+import { ToastState } from '../state';
 import {
-  type ExternalToast,
   type HeightT,
   Position,
   type ToasterProps,
   ToastOptions,
   type ToastToDismiss,
   type ToastType,
-} from './types';
-import { getDocumentDirection } from './utils/get-document-direction';
+} from '../types';
+import { getDocumentDirection } from '../utils/get-document-direction';
+import { Toast } from './toast';
 
-function _cn(...classes: (string | undefined)[]) {
-  return classes.filter(Boolean).join(' ');
-}
-
-function createSomoto() {
-  const [activeToasts, setActiveToasts] = createSignal<ToastType[]>([]);
-
-  onMount(() => {
-    const unSubscribe = ToastState.subscribe(toast => {
-      setActiveToasts(currentToasts => {
-        if ('dismiss' in toast && toast.dismiss) {
-          return currentToasts.filter(t => t.id !== toast.id);
-        }
-
-        const existingToastIndex = currentToasts.findIndex(t => t.id === toast.id);
-        if (existingToastIndex !== -1) {
-          const updatedToasts = [...currentToasts];
-          updatedToasts[existingToastIndex] = { ...updatedToasts[existingToastIndex], ...toast };
-          return updatedToasts;
-        } else {
-          return [toast, ...currentToasts];
-        }
-      });
-    });
-
-    onCleanup(unSubscribe);
-  });
-
-  return {
-    toasts: activeToasts,
-  };
-}
-
-const Toaster: Component<ToasterProps> = p => {
+export const Toaster: Component<ToasterProps> = p => {
   const { offset, style, icons } = p;
   const props = mergeProps(
     {
@@ -73,7 +37,6 @@ const Toaster: Component<ToasterProps> = p => {
       visibleToasts: VISIBLE_TOASTS_AMOUNT,
       dir: getDocumentDirection(),
       containerAriaLabel: 'Notifications',
-      cn: _cn,
     } satisfies Partial<ToasterProps>,
     p,
   );
@@ -105,7 +68,7 @@ const Toaster: Component<ToasterProps> = p => {
   );
 
   const [listRef, setListRef] = createSignal<HTMLOListElement>();
-  const hotkeyLabel = props.hotkey.join('+').replace(/Key/g, '').replace(/Digit/g, '');
+  const hotkeyLabel = () => props.hotkey.join('+').replace(/Key/g, '').replace(/Digit/g, '');
   let lastFocusedElementRef: HTMLElement | null = null;
   let isFocusWithinRef = false;
 
@@ -126,24 +89,19 @@ const Toaster: Component<ToasterProps> = p => {
         return;
       }
 
-      // Prevent batching, temp solution.
-      setTimeout(() => {
-        ReactDOM.flushSync(() => {
-          setToasts(toasts => {
-            const indexOfExistingToast = toasts.findIndex(t => t.id === toast.id);
+      setToasts(toasts => {
+        const indexOfExistingToast = toasts.findIndex(t => t.id === toast.id);
 
-            // Update the toast if it already exists
-            if (indexOfExistingToast !== -1) {
-              return [
-                ...toasts.slice(0, indexOfExistingToast),
-                { ...toasts[indexOfExistingToast], ...toast },
-                ...toasts.slice(indexOfExistingToast + 1),
-              ];
-            }
+        // Update the toast if it already exists
+        if (indexOfExistingToast !== -1) {
+          return [
+            ...toasts.slice(0, indexOfExistingToast),
+            { ...toasts[indexOfExistingToast], ...toast },
+            ...toasts.slice(indexOfExistingToast + 1),
+          ];
+        }
 
-            return [toast, ...toasts];
-          });
-        });
+        return [toast, ...toasts];
       });
     });
     onCleanup(unSubscribe);
@@ -222,7 +180,7 @@ const Toaster: Component<ToasterProps> = p => {
   return (
     // Remove item from normal navigation flow, only available via hotkey
     <section
-      aria-label={`${props.containerAriaLabel} ${hotkeyLabel}`}
+      aria-label={`${props.containerAriaLabel} ${hotkeyLabel()}`}
       tabIndex={-1}
       ref={r => (props.ref = r)}
     >
@@ -234,7 +192,7 @@ const Toaster: Component<ToasterProps> = p => {
             tabIndex={-1}
             ref={setListRef}
             class={props.className}
-            data-sonner-toaster
+            data-somoto-toaster=""
             data-theme={actualTheme}
             data-y-position={y}
             data-x-position={x}
@@ -311,7 +269,6 @@ const Toaster: Component<ToasterProps> = p => {
                   gap={props.gap}
                   expanded={expanded()}
                   pauseWhenPageIsHidden={props.pauseWhenPageIsHidden}
-                  cn={props.cn}
                 />
               ))}
           </ol>
@@ -320,13 +277,3 @@ const Toaster: Component<ToasterProps> = p => {
     </section>
   );
 };
-
-export {
-  createSomoto,
-  type ExternalToast,
-  toast,
-  Toaster,
-  type ToasterProps,
-  type ToastType as ToastT,
-};
-export { type Action, type ToastClassnames, type ToastToDismiss } from './types';
