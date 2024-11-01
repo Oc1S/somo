@@ -1,7 +1,7 @@
 import { defineConfig } from 'tsup';
 import * as preset from 'tsup-preset-solid';
 
-const preset_options: preset.PresetOptions = {
+const presetOptions: preset.PresetOptions = {
   // array or single object
   entries: [
     {
@@ -26,23 +26,20 @@ const CI =
 export default defineConfig(config => {
   const watching = !!config.watch;
 
-  const parsed_options = {
-    ...preset.parsePresetOptions(preset_options, watching),
-    loader: {
-      '.css': 'css',
-    },
-  };
+  const parsedOptions = preset.parsePresetOptions(presetOptions, watching);
 
   if (!watching && !CI) {
-    const package_fields = preset.generatePackageExports(parsed_options);
+    const packageFields = preset.generatePackageExports(parsedOptions);
 
-    console.log(`package.json: \n\n${JSON.stringify(package_fields, null, 2)}\n\n`);
+    console.log(`package.json: \n\n${JSON.stringify(packageFields, null, 2)}\n\n`);
 
     // will update ./package.json with the correct export fields
-    preset.writePackageJson(package_fields);
+    preset.writePackageJson(packageFields);
   }
 
-  const options = preset.generateTsupOptions(parsed_options);
-  console.log(options);
+  let options = preset.generateTsupOptions(parsedOptions);
+  options = options.map(option => ({
+    ...option,
+  }));
   return options;
 });

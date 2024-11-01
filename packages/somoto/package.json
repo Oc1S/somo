@@ -1,7 +1,7 @@
 {
   "name": "somoto",
   "version": "0.0.0",
-  "description": "SolidJS Motion",
+  "description": "SolidJS Motion Toast",
   "license": "MIT",
   "author": "Oc1s",
   "repository": {
@@ -16,7 +16,7 @@
     "dist"
   ],
   "private": false,
-  "sideEffects": false,
+  "sideEffects": true,
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -75,7 +75,7 @@
     "tailwind-merge": "^2.3.0",
     "tailwindcss": "^3.4.3",
     "tailwindcss-animate": "^1.0.7",
-    "tsup": "^8.0.2",
+    "tsup": "^8.3.5",
     "tsup-preset-solid": "^2.2.0",
     "typescript": "^5.4.5",
     "vite": "^5.2.11",
@@ -87,7 +87,11 @@
   },
   "keywords": [
     "solid",
-    "hooks"
+    "hooks",
+    "notifications",
+    "toast",
+    "snackbar",
+    "message"
   ],
   "engines": {
     "node": ">=18"

@@ -125,13 +125,31 @@ export const Toaster: Component<ToasterProps> = p => {
 
     if (typeof window === 'undefined') return;
 
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', ({ matches }) => {
-      if (matches) {
-        setActualTheme('dark');
-      } else {
-        setActualTheme('light');
-      }
-    });
+    const darkMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+    try {
+      // Chrome & Firefox
+      darkMediaQuery.addEventListener('change', ({ matches }) => {
+        if (matches) {
+          setActualTheme('dark');
+        } else {
+          setActualTheme('light');
+        }
+      });
+    } catch (error) {
+      // Safari < 14
+      darkMediaQuery.addListener(({ matches }) => {
+        try {
+          if (matches) {
+            setActualTheme('dark');
+          } else {
+            setActualTheme('light');
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      });
+    }
   });
 
   // Ensure expanded is always false when no toasts are present / only one left

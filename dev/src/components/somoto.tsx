@@ -1,12 +1,12 @@
 import { onMount } from 'solid-js';
-import { Toaster } from 'somoto';
+import { toast, Toaster } from 'somoto';
 export const Somoto = () => {
   onMount(() => {
-    toast;
+    toast('hi');
   });
   return (
-    <div>
+    <>
       <Toaster></Toaster>
-    </div>
+    </>
   );
 };

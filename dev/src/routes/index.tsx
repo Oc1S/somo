@@ -9,7 +9,7 @@ export default function Home() {
     <main class="mx-auto p-4 text-center">
       <Switch>
         <Match when={type() === 'somoto'}>
-          <Somoto></Somoto>
+          <Somoto />
         </Match>
       </Switch>
     </main>

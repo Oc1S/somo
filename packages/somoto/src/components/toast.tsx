@@ -1,4 +1,4 @@
-import './styles.css';
+import '../styles.css';
 
 import { createEffect, createMemo, createSignal, mergeProps, onCleanup, Show } from 'solid-js';
 

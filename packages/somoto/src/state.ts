@@ -207,17 +207,6 @@ class Observer {
 
 export const ToastState = new Observer();
 
-// bind this to the toast function
-const toastFunction = (message: JSX.Element, data?: ExternalToast) => {
-  const id = data?.id || toastsCounter++;
-  ToastState.addToast({
-    title: message,
-    ...data,
-    id,
-  });
-  return id;
-};
-
 const isHttpResponse = (data: any): data is Response => {
   return (
     data &&
@@ -229,7 +218,15 @@ const isHttpResponse = (data: any): data is Response => {
   );
 };
 
-const basicToast = toastFunction;
+const basicToast = (message: JSX.Element, data?: ExternalToast) => {
+  const id = data?.id || toastsCounter++;
+  ToastState.addToast({
+    title: message,
+    ...data,
+    id,
+  });
+  return id;
+};
 
 const getHistory = () => ToastState.toasts;
 

@@ -1,5 +1,3 @@
-import './styles.css';
-
 import { Toaster } from './components/toaster';
 import { toast } from './state';
 import { ExternalToast, ToasterProps, ToastType } from './types';

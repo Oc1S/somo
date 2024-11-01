@@ -2,7 +2,6 @@
   "root": true,
   "compilerOptions": {
     "allowJs": true,
-    // "strict": true,
     "target": "ESNext",
     "module": "ESNext",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],

@@ -117,8 +117,6 @@ export interface ToastOptions {
   classNames?: ToastClassnames;
 }
 
-type CnFunction = (...classes: Array<string | undefined>) => string;
-
 export type Direction = 'rtl' | 'ltr' | 'auto';
 
 export interface ToasterProps {
@@ -140,7 +138,7 @@ export interface ToasterProps {
   icons?: ToastIcons;
   containerAriaLabel?: string;
   pauseWhenPageIsHidden?: boolean;
-  ref: Ref<HTMLElement>;
+  ref?: Ref<HTMLElement>;
 }
 
 export interface ToastProps {
