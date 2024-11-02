@@ -1,7 +1,7 @@
 import '../styles.css';
 
+import type { Component } from 'solid-js';
 import {
-  Component,
   createEffect,
   createMemo,
   createSignal,
@@ -14,13 +14,13 @@ import {
 
 import { GAP, TOAST_WIDTH, VIEWPORT_OFFSET, VISIBLE_TOASTS_AMOUNT } from '../constants';
 import { ToastState } from '../state';
-import {
-  type HeightT,
+import type {
+  HeightT,
   Position,
-  type ToasterProps,
+  ToasterProps,
   ToastOptions,
-  type ToastToDismiss,
-  type ToastType,
+  ToastToDismiss,
+  ToastType,
 } from '../types';
 import { getDocumentDirection } from '../utils/get-document-direction';
 import { Toast } from './toast';

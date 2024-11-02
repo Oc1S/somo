@@ -1,26 +1,39 @@
 import { toast, Toaster } from 'somoto';
 
+import { Button } from './ui/button';
+
+const duration = 300_000;
 export const Somoto = () => {
   return (
-    <div class="flex gap-4">
-      <button
-        class="rounded-md bg-white px-4 py-1.5 text-black"
-        onClick={() => {
-          toast('Hello World!', {
-            duration: 30_000,
-          });
-        }}
-      >
-        Toast!
-      </button>
-    </div>
+    <>
+      <div class="flex gap-4">
+        <Button
+          onClick={() => {
+            toast('Hello World!', {
+              duration: duration,
+            });
+          }}
+        >
+          Toast!
+        </Button>
+        <Button
+          onClick={() => {
+            toast.warning('Hello World!', {
+              duration: duration,
+            });
+          }}
+        >
+          Warning
+        </Button>
+      </div>
+      <Toaster></Toaster>
+    </>
   );
 };
 
 export default function SomotoTest() {
   return (
     <>
-      <Toaster></Toaster>
       <Somoto></Somoto>
     </>
   );

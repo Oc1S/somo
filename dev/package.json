@@ -12,11 +12,12 @@
     "@solidjs/router": "^0.14.7",
     "@solidjs/start": "^1.0.8",
     "autoprefixer": "^10.4.19",
+    "clsx": "^2.1.1",
     "postcss": "^8.4.38",
     "solid-js": "^1.9.1",
-    "tailwindcss": "^3.4.3",
     "somo": "*",
     "somoto": "*",
+    "tailwindcss": "^3.4.3",
     "vinxi": "^0.4.3"
   },
   "devDependencies": {

@@ -1,4 +1,6 @@
-import { JSX, Ref, Setter } from 'solid-js';
+import type { Accessor, JSX, Ref, Setter } from 'solid-js';
+
+export type MaybeAccessor<T> = T | Accessor<T>;
 
 export type ToastVariants =
   | 'normal'

@@ -25,6 +25,7 @@ module.exports = {
     ],
     'simple-import-sort/exports': 'warn',
     'no-debugger': 'warn',
+    '@typescript-eslint/consistent-type-imports': 'warn',
     '@typescript-eslint/no-unused-vars': [
       'warn',
       {

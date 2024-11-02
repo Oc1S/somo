@@ -1,17 +1,12 @@
 import { createEffect, createMemo, createSignal, mergeProps, onCleanup, Show } from 'solid-js';
+import { createTimer } from 'src/primitives/create-timer';
 
 import { GAP, SWIPE_THRESHOLD, TIME_BEFORE_UNMOUNT, TOAST_LIFETIME } from '../constants';
 import { useIsDocumentHidden } from '../hooks/use-is-document-hidden';
 import { useIsMounted } from '../hooks/use-is-mounted';
 import { toast } from '../state';
-import {
-  Action,
-  isAction,
-  ToastClassnames,
-  ToastIcons,
-  type ToastProps,
-  ToastVariants,
-} from '../types';
+import type { Action, ToastClassnames, ToastIcons, ToastVariants } from '../types';
+import { isAction, type ToastProps } from '../types';
 import { cn } from '../utils/cn';
 import { CloseIcon, getIcon, Loader } from './icons';
 
@@ -34,22 +29,26 @@ export const Toast = (p: ToastProps) => {
   const [toastElement, setToastElement] = createSignal<HTMLLIElement>();
 
   const isFront = () => props.index === 0;
+  const invert = () => props.toast.invert || props.invert;
   const isVisible = () => props.index + 1 <= props.visibleToasts;
   const toastType = () => props.toast.type;
+  const disabled = () => toastType() === 'loading';
   const dismissible = () => props.toast.dismissible !== false;
   const closeButton = () => props.toast.closeButton ?? props.closeButton;
   const duration = () => props.toast.duration || props.duration || TOAST_LIFETIME;
 
-  // Height index is used to calculate the offset as it gets updated before the toast array, which means we can calculate the new layout faster.
-  const heightIndex = createMemo(
-    () => props.heights.findIndex(height => height.toastId === props.toast.id) || 0,
-  );
-  const position = createMemo(() => props.position.split('-'));
-
   let dragStartTime: Date | null = null;
-  let closeTimerStartTimeRef = 0;
-  let lastCloseTimerStartTimeRef = 0;
   let pointerStartRef: { x: number; y: number } | null = null;
+
+  const position = createMemo(() => props.position.split('-'));
+  const isDocumentHidden = useIsDocumentHidden();
+
+  // Height index is used to calculate the offset as it gets updated before the toast array, which means we can calculate the new layout faster.
+  const heightIndex = createMemo(() => {
+    const index = props.heights.findIndex(height => height.toastId === props.toast.id);
+    console.log('@index', props.index, '@height-index', index, '@@');
+    return index === -1 ? 0 : index;
+  });
 
   const toastsHeightBefore = createMemo(() => {
     return props.heights.reduce((prev, curr, reducerIndex) => {
@@ -61,12 +60,25 @@ export const Toast = (p: ToastProps) => {
     }, 0);
   });
 
-  const isDocumentHidden = useIsDocumentHidden();
-
-  const invert = () => props.toast.invert || props.invert;
-  const disabled = () => toastType() === 'loading';
-
-  const offset = createMemo(() => heightIndex() * props.gap + toastsHeightBefore());
+  const offset = createMemo(() => {
+    console.log(
+      '@id',
+      props.toast.id,
+      '@index',
+      props.index,
+      '@height-index',
+      heightIndex(),
+      '@gap',
+      props.gap,
+      '@height-before',
+      toastsHeightBefore(),
+      '@offset',
+      heightIndex() * props.gap + toastsHeightBefore(),
+      '@heights',
+      props.heights,
+    );
+    return heightIndex() * props.gap + toastsHeightBefore();
+  });
 
   createEffect(() => {
     const toastNode = toastElement();
@@ -78,19 +90,23 @@ export const Toast = (p: ToastProps) => {
 
     setInitialHeight(newHeight);
 
+    // Add toast height to heights array after the toast is mounted
     props.setHeights(heights => {
       const alreadyExists = heights.find(height => height.toastId === props.toast.id);
-      if (!alreadyExists) {
-        return [
-          /* todo:! */
-          { toastId: props.toast.id, height: newHeight, position: props.toast.position! },
-          ...heights,
-        ];
-      } else {
+      if (alreadyExists) {
         return heights.map(height =>
           height.toastId === props.toast.id ? { ...height, height: newHeight } : height,
         );
+      } else {
+        return [
+          { toastId: props.toast.id, height: newHeight, position: props.toast.position! },
+          ...heights,
+        ];
       }
+    });
+
+    onCleanup(() => {
+      props.setHeights(heights => heights.filter(height => height.toastId !== props.toast.id));
     });
   });
 
@@ -105,41 +121,13 @@ export const Toast = (p: ToastProps) => {
     }, TIME_BEFORE_UNMOUNT);
   };
 
+  /* auto close */
   createEffect(() => {
-    if (
-      (props.toast.promise && toastType() === 'loading') ||
-      props.toast.duration === Infinity ||
-      toastType() === 'loading'
-    )
-      return;
-    let timeoutId: ReturnType<typeof setTimeout>;
-    let remainingTime = duration();
-
-    // Pause the timer on each hover
-    const pauseTimer = () => {
-      if (lastCloseTimerStartTimeRef < closeTimerStartTimeRef) {
-        // Get the elapsed time since the timer started
-        const elapsedTime = new Date().getTime() - closeTimerStartTimeRef;
-
-        remainingTime = remainingTime - elapsedTime;
-      }
-
-      lastCloseTimerStartTimeRef = new Date().getTime();
-    };
-
-    const startTimer = () => {
-      // setTimeout(callback, Infinity) behaves as if the delay is 0.
-      // As a result, the toast would be closed immediately, giving the appearance that it was never rendered.
-      if (remainingTime === Infinity) return;
-
-      closeTimerStartTimeRef = new Date().getTime();
-
-      // Let the toast know it has started
-      timeoutId = setTimeout(() => {
-        props.toast.onAutoClose?.(props.toast);
-        deleteToast();
-      }, remainingTime);
-    };
+    if (duration() === Infinity || toastType() === 'loading') return;
+    const { startTimer, pauseTimer } = createTimer(duration(), () => {
+      props.toast.onAutoClose?.(props.toast);
+      deleteToast();
+    });
 
     if (
       props.expanded ||
@@ -149,27 +137,6 @@ export const Toast = (p: ToastProps) => {
       pauseTimer();
     } else {
       startTimer();
-    }
-
-    onCleanup(() => {
-      clearTimeout(timeoutId);
-    });
-  });
-
-  createEffect(() => {
-    const toastNode = toastElement();
-
-    if (toastNode) {
-      const height = toastNode.getBoundingClientRect().height;
-
-      // Add toast height tot heights array after the toast is mounted
-      setInitialHeight(height);
-      props.setHeights(h => [
-        { toastId: props.toast.id, height, position: props.toast.position! },
-        ...h,
-      ]);
-
-      return () => props.setHeights(h => h.filter(height => height.toastId !== props.toast.id));
     }
   });
 
