@@ -197,6 +197,10 @@ export const Toaster: Component<ToasterProps> = p => {
     }
   });
 
+  createEffect(() => {
+    console.log('toasts:', toasts());
+  });
+
   return (
     <Show when={toasts().length}>
       {/* Remove item from normal navigation flow, only available via hotkey */}
@@ -271,7 +275,10 @@ export const Toaster: Component<ToasterProps> = p => {
               >
                 <For
                   each={toasts().filter(
-                    toast => (!toast.position && index() === 0) || toast.position === position,
+                    toast =>
+                      (!toast.position &&
+                        index() === 0) /* case that don't have position but as first */ ||
+                      toast.position === position,
                   )}
                 >
                   {(toast, index) => (
@@ -284,14 +291,14 @@ export const Toaster: Component<ToasterProps> = p => {
                       duration={props.toastOptions.duration ?? props.duration}
                       class={props.toastOptions.className}
                       descriptionClassName={props.toastOptions.descriptionClassName}
-                      style={props.toastOptions.style}
-                      unstyled={props.toastOptions.unstyled}
                       classNames={props.toastOptions.classNames}
+                      unstyled={props.toastOptions.unstyled}
+                      style={props.toastOptions.style}
                       cancelButtonStyle={props.toastOptions.cancelButtonStyle}
                       actionButtonStyle={props.toastOptions.actionButtonStyle}
                       closeButton={props.toastOptions.closeButton ?? props.closeButton}
                       invert={props.invert}
-                      visibleToasts={props.visibleAmount}
+                      visibleAmount={props.visibleAmount}
                       interacting={interacting()}
                       position={props.position}
                       removeToast={removeToast}

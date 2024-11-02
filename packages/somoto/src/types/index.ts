@@ -3,14 +3,13 @@ import type { Accessor, JSX, Ref, Setter } from 'solid-js';
 export type MaybeAccessor<T> = T | Accessor<T>;
 
 export type ToastVariants =
-  | 'normal'
+  | 'default'
   | 'action'
   | 'success'
   | 'info'
   | 'warning'
   | 'error'
-  | 'loading'
-  | 'default';
+  | 'loading';
 
 export type PromiseT<Data = any> = Promise<Data> | (() => Promise<Data>);
 
@@ -154,7 +153,7 @@ export interface ToastProps {
   removeToast: (toast: ToastType) => void;
   gap?: number;
   position: Position;
-  visibleToasts: number;
+  visibleAmount: number;
   expandByDefault: boolean;
   closeButton: boolean;
   interacting: boolean;

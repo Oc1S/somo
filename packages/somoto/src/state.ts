@@ -1,4 +1,4 @@
-import { JSX } from 'solid-js';
+import type { JSX } from 'solid-js';
 
 import type {
   ExternalToast,
@@ -8,6 +8,7 @@ import type {
   ToastType,
   ToastVariants,
 } from './types';
+import { isHttpResponse } from './utils/helper';
 
 let toastsCounter = 1;
 
@@ -206,17 +207,6 @@ class Observer {
 }
 
 export const ToastState = new Observer();
-
-const isHttpResponse = (data: any): data is Response => {
-  return (
-    data &&
-    typeof data === 'object' &&
-    'ok' in data &&
-    typeof data.ok === 'boolean' &&
-    'status' in data &&
-    typeof data.status === 'number'
-  );
-};
 
 const basicToast = (message: JSX.Element, data?: ExternalToast) => {
   const id = data?.id || toastsCounter++;

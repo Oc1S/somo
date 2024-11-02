@@ -1,35 +1,34 @@
-import { For, JSX } from 'solid-js';
+import type { JSX } from 'solid-js';
+import { For } from 'solid-js';
 
 import type { ToastVariants } from '../types';
 
 export const getIcon = (type: ToastVariants): JSX.Element | null => {
   switch (type) {
     case 'success':
-      return SuccessIcon;
+      return <SuccessIcon />;
     case 'info':
-      return InfoIcon;
+      return <InfoIcon />;
     case 'warning':
-      return WarningIcon;
+      return <WarningIcon />;
     case 'error':
-      return ErrorIcon;
+      return <ErrorIcon />;
     default:
       return null;
   }
 };
 
-const bars = Array(12).fill(0);
-
-export const Loader = ({ visible }: { visible: boolean }) => {
+export const Loading = ({ visible }: { visible: boolean }) => {
   return (
     <div class="somoto-loading-wrapper" data-visible={visible}>
       <div class="somoto-spinner">
-        <For each={bars}>{() => <div class="somoto-loading-bar" />}</For>
+        <For each={Array(12).fill(0)}>{() => <div class="somoto-loading-bar" />}</For>
       </div>
     </div>
   );
 };
 
-const SuccessIcon = (
+const SuccessIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 20 20"
@@ -45,7 +44,7 @@ const SuccessIcon = (
   </svg>
 );
 
-const WarningIcon = (
+const WarningIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -61,7 +60,7 @@ const WarningIcon = (
   </svg>
 );
 
-const InfoIcon = (
+const InfoIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 20 20"
@@ -77,7 +76,7 @@ const InfoIcon = (
   </svg>
 );
 
-const ErrorIcon = (
+const ErrorIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 20 20"
@@ -93,7 +92,7 @@ const ErrorIcon = (
   </svg>
 );
 
-export const CloseIcon = (
+export const CloseIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="12"
