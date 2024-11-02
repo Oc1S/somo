@@ -1,5 +1,3 @@
-import '../styles.css';
-
 import { createEffect, createMemo, createSignal, mergeProps, onCleanup, Show } from 'solid-js';
 
 import { GAP, SWIPE_THRESHOLD, TIME_BEFORE_UNMOUNT, TOAST_LIFETIME } from '../constants';
@@ -12,7 +10,7 @@ import {
   ToastClassnames,
   ToastIcons,
   type ToastProps,
-  ToastTypes,
+  ToastVariants,
 } from '../types';
 import { cn } from '../utils/cn';
 import { CloseIcon, getIcon, Loader } from './icons';
@@ -26,6 +24,7 @@ export const Toast = (p: ToastProps) => {
     },
     p,
   );
+
   const mounted = useIsMounted();
   const [removed, setRemoved] = createSignal(false);
   const [swiping, setSwiping] = createSignal(false);
@@ -229,7 +228,7 @@ export const Toast = (p: ToastProps) => {
         '--toasts-before': props.index,
         '--z-index': props.toasts.length - props.index,
         '--offset': `${removed() ? offsetBeforeRemove() : offset()}px`,
-        '--initial-height': props.expandByDefault ? 'auto' : `${initialHeight}px`,
+        '--initial-height': props.expandByDefault ? 'auto' : `${initialHeight()}px`,
         ...props.style,
         ...props.toast.style,
       }}
@@ -321,7 +320,7 @@ export const Toast = (p: ToastProps) => {
                 <Show when={toastType() !== 'loading'}>
                   {props.toast.icon ||
                     props.icons?.[toastType() as keyof ToastIcons] ||
-                    getIcon(toastType() as ToastTypes)}
+                    getIcon(toastType() as ToastVariants)}
                 </Show>
               </div>
             </Show>

@@ -1,7 +1,7 @@
 import { createSignal, For, Match, Switch } from 'solid-js';
 
 import Somo from '~/components/somo';
-import { Somoto } from '~/components/somoto';
+import Somoto from '~/components/somoto';
 
 export default function Home() {
   const demoList = ['somo', 'somoto'] as const;

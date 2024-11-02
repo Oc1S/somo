@@ -38,5 +38,8 @@ export default defineConfig(config => {
     preset.writePackageJson(packageFields);
   }
 
-  return preset.generateTsupOptions(parsedOptions);
+  return preset.generateTsupOptions(parsedOptions).map(options => ({
+    ...options,
+    injectStyle: true,
+  }));
 });

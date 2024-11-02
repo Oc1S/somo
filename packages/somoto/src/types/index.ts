@@ -1,6 +1,6 @@
 import { JSX, Ref, Setter } from 'solid-js';
 
-export type ToastTypes =
+export type ToastVariants =
   | 'normal'
   | 'action'
   | 'success'
@@ -62,7 +62,7 @@ export interface Action {
 export interface ToastType {
   id: number | string;
   title?: string | JSX.Element;
-  type?: ToastTypes;
+  type?: ToastVariants;
   icon?: JSX.Element;
   jsx?: JSX.Element;
   richColors?: boolean;
@@ -128,7 +128,7 @@ export interface ToasterProps {
   expand?: boolean;
   duration?: number;
   gap?: number;
-  visibleToasts?: number;
+  visibleAmount?: number;
   closeButton?: boolean;
   toastOptions?: ToastOptions;
   className?: string;

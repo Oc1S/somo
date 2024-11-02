@@ -1,11 +1,15 @@
+import '../styles.css';
+
 import {
   Component,
   createEffect,
   createMemo,
   createSignal,
+  For,
   mergeProps,
   onCleanup,
   onMount,
+  Show,
 } from 'solid-js';
 
 import { GAP, TOAST_WIDTH, VIEWPORT_OFFSET, VISIBLE_TOASTS_AMOUNT } from '../constants';
@@ -22,7 +26,6 @@ import { getDocumentDirection } from '../utils/get-document-direction';
 import { Toast } from './toast';
 
 export const Toaster: Component<ToasterProps> = p => {
-  const { offset, style, icons } = p;
   const props = mergeProps(
     {
       invert: false,
@@ -33,8 +36,9 @@ export const Toaster: Component<ToasterProps> = p => {
       position: 'bottom-right',
       hotkey: ['altKey', 'KeyT'],
       theme: 'light',
+      offset: VIEWPORT_OFFSET,
       toastOptions: {} as ToastOptions,
-      visibleToasts: VISIBLE_TOASTS_AMOUNT,
+      visibleAmount: VISIBLE_TOASTS_AMOUNT,
       dir: getDocumentDirection(),
       containerAriaLabel: 'Notifications',
     } satisfies Partial<ToasterProps>,
@@ -193,107 +197,118 @@ export const Toaster: Component<ToasterProps> = p => {
     }
   });
 
-  if (!toasts().length) return null;
-
   return (
-    // Remove item from normal navigation flow, only available via hotkey
-    <section
-      aria-label={`${props.containerAriaLabel} ${hotkeyLabel()}`}
-      tabIndex={-1}
-      ref={r => {
-        props.ref = r;
-      }}
-    >
-      {possiblePositions().map((position, index) => {
-        const [y, x] = position.split('-');
-        return (
-          <ol
-            dir={props.dir === 'auto' ? getDocumentDirection() : props.dir}
-            tabIndex={-1}
-            ref={setListRef}
-            class={props.className}
-            data-somoto-toaster=""
-            data-theme={actualTheme}
-            data-y-position={y}
-            data-x-position={x}
-            style={{
-              '--front-toast-height': `${heights()[0]?.height || 0}px`,
-              '--offset': typeof offset === 'number' ? `${offset}px` : offset || VIEWPORT_OFFSET,
-              '--width': `${TOAST_WIDTH}px`,
-              '--gap': `${props.gap}px`,
-              ...style,
-            }}
-            onBlur={event => {
-              if (isFocusWithinRef && !event.currentTarget.contains(event.relatedTarget as Node)) {
-                isFocusWithinRef = false;
-                if (lastFocusedElementRef) {
-                  lastFocusedElementRef.focus({ preventScroll: true });
-                  lastFocusedElementRef = null;
-                }
-              }
-            }}
-            onFocus={event => {
-              const isNotDismissible =
-                event.target instanceof HTMLElement && event.target.dataset.dismissible === 'false';
+    <Show when={toasts().length}>
+      {/* Remove item from normal navigation flow, only available via hotkey */}
+      <section
+        aria-label={`${props.containerAriaLabel} ${hotkeyLabel()}`}
+        tabIndex={-1}
+        ref={r => {
+          props.ref = r;
+        }}
+      >
+        <For each={possiblePositions()}>
+          {(position, index) => {
+            const [y, x] = position.split('-');
+            return (
+              <ol
+                dir={props.dir === 'auto' ? getDocumentDirection() : props.dir}
+                tabIndex={-1}
+                ref={setListRef}
+                class={props.className}
+                data-somoto-toaster=""
+                data-theme={actualTheme()}
+                data-y-position={y}
+                data-x-position={x}
+                style={{
+                  '--front-toast-height': `${heights()[0]?.height || 0}px`,
+                  '--offset': typeof props.offset === 'number' ? `${props.offset}px` : props.offset,
+                  '--width': `${TOAST_WIDTH}px`,
+                  '--gap': `${props.gap}px`,
+                  ...props.style,
+                }}
+                onBlur={event => {
+                  if (
+                    isFocusWithinRef &&
+                    !event.currentTarget.contains(event.relatedTarget as Node)
+                  ) {
+                    isFocusWithinRef = false;
+                    if (lastFocusedElementRef) {
+                      lastFocusedElementRef.focus({ preventScroll: true });
+                      lastFocusedElementRef = null;
+                    }
+                  }
+                }}
+                onFocus={event => {
+                  const isNotDismissible =
+                    event.target instanceof HTMLElement &&
+                    event.target.dataset.dismissible === 'false';
 
-              if (isNotDismissible) return;
+                  if (isNotDismissible) return;
 
-              if (!isFocusWithinRef) {
-                isFocusWithinRef = true;
-                lastFocusedElementRef = event.relatedTarget as HTMLElement;
-              }
-            }}
-            onMouseEnter={() => setExpanded(true)}
-            onMouseMove={() => setExpanded(true)}
-            onMouseLeave={() => {
-              // Avoid setting expanded to false when interacting with a toast, e.g. swiping
-              if (!interacting) {
-                setExpanded(false);
-              }
-            }}
-            onPointerDown={event => {
-              const isNotDismissible =
-                event.target instanceof HTMLElement && event.target.dataset.dismissible === 'false';
+                  if (!isFocusWithinRef) {
+                    isFocusWithinRef = true;
+                    lastFocusedElementRef = event.relatedTarget as HTMLElement;
+                  }
+                }}
+                onMouseEnter={() => setExpanded(true)}
+                onMouseMove={() => setExpanded(true)}
+                onMouseLeave={() => {
+                  // Avoid setting expanded to false when interacting with a toast, e.g. swiping
+                  if (!interacting()) {
+                    setExpanded(false);
+                  }
+                }}
+                onPointerDown={event => {
+                  const isNotDismissible =
+                    event.target instanceof HTMLElement &&
+                    event.target.dataset.dismissible === 'false';
 
-              if (isNotDismissible) return;
-              setInteracting(true);
-            }}
-            onPointerUp={() => setInteracting(false)}
-          >
-            {toasts()
-              .filter(toast => (!toast.position && index === 0) || toast.position === position)
-              .map((toast, index) => (
-                <Toast
-                  icons={icons}
-                  index={index}
-                  toast={toast}
-                  defaultRichColors={props.richColors}
-                  duration={props.toastOptions.duration ?? props.duration}
-                  class={props.toastOptions.className}
-                  descriptionClassName={props.toastOptions.descriptionClassName}
-                  style={props.toastOptions.style}
-                  unstyled={props.toastOptions.unstyled}
-                  classNames={props.toastOptions.classNames}
-                  cancelButtonStyle={props.toastOptions.cancelButtonStyle}
-                  actionButtonStyle={props.toastOptions.actionButtonStyle}
-                  closeButton={props.toastOptions.closeButton ?? props.closeButton}
-                  invert={props.invert}
-                  visibleToasts={props.visibleToasts}
-                  interacting={interacting()}
-                  position={props.position}
-                  removeToast={removeToast}
-                  toasts={toasts().filter(t => t.position == toast.position)}
-                  heights={heights().filter(h => h.position == toast.position)}
-                  setHeights={setHeights}
-                  expandByDefault={props.expand}
-                  gap={props.gap}
-                  expanded={expanded()}
-                  pauseWhenPageIsHidden={props.pauseWhenPageIsHidden}
-                />
-              ))}
-          </ol>
-        );
-      })}
-    </section>
+                  if (isNotDismissible) return;
+                  setInteracting(true);
+                }}
+                onPointerUp={() => setInteracting(false)}
+              >
+                <For
+                  each={toasts().filter(
+                    toast => (!toast.position && index() === 0) || toast.position === position,
+                  )}
+                >
+                  {(toast, index) => (
+                    <Toast
+                      icons={props.icons}
+                      index={index()}
+                      toast={toast}
+                      gap={props.gap}
+                      defaultRichColors={props.richColors}
+                      duration={props.toastOptions.duration ?? props.duration}
+                      class={props.toastOptions.className}
+                      descriptionClassName={props.toastOptions.descriptionClassName}
+                      style={props.toastOptions.style}
+                      unstyled={props.toastOptions.unstyled}
+                      classNames={props.toastOptions.classNames}
+                      cancelButtonStyle={props.toastOptions.cancelButtonStyle}
+                      actionButtonStyle={props.toastOptions.actionButtonStyle}
+                      closeButton={props.toastOptions.closeButton ?? props.closeButton}
+                      invert={props.invert}
+                      visibleToasts={props.visibleAmount}
+                      interacting={interacting()}
+                      position={props.position}
+                      removeToast={removeToast}
+                      toasts={toasts().filter(t => t.position == toast.position)}
+                      heights={heights().filter(h => h.position == toast.position)}
+                      setHeights={setHeights}
+                      expandByDefault={props.expand}
+                      expanded={expanded()}
+                      pauseWhenPageIsHidden={props.pauseWhenPageIsHidden}
+                    />
+                  )}
+                </For>
+              </ol>
+            );
+          }}
+        </For>
+      </section>
+    </Show>
   );
 };

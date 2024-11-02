@@ -6,7 +6,7 @@ import type {
   PromiseT,
   ToastToDismiss,
   ToastType,
-  ToastTypes,
+  ToastVariants,
 } from './types';
 
 let toastsCounter = 1;
@@ -42,7 +42,7 @@ class Observer {
   create = (
     data: ExternalToast & {
       message?: JSX.Element;
-      type?: ToastTypes;
+      type?: ToastVariants;
       promise?: PromiseT;
       jsx?: JSX.Element;
     },
@@ -220,7 +220,6 @@ const isHttpResponse = (data: any): data is Response => {
 
 const basicToast = (message: JSX.Element, data?: ExternalToast) => {
   const id = data?.id || toastsCounter++;
-  console.log('id', id);
   ToastState.addToast({
     title: message,
     ...data,
