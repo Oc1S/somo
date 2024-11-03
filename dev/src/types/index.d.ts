@@ -1,0 +1,1 @@
+type Key = number | string;

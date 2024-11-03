@@ -1,11 +1,14 @@
-import { Accessor, createEffect, createMemo, onCleanup, useContext } from 'solid-js';
-import { createMotionState, createStyles, MotionState, style } from '@motionone/dom';
-import { KeyframeOptions } from '@motionone/types';
+import type { Accessor } from 'solid-js';
+import { createEffect, createMemo, onCleanup, useContext } from 'solid-js';
+import type { MotionState } from '@motionone/dom';
+import { createMotionState, createStyles, style } from '@motionone/dom';
+import type { KeyframeOptions } from '@motionone/types';
 import { isObject } from 'lodash-es';
 
-import { PresenceContext, PresenceContextState } from './components/presence.jsx';
+import type { PresenceContextState } from './components/presence.jsx';
+import { PresenceContext } from './components/presence.jsx';
 import { MotionConfig } from './context.js';
-import { Options } from './types/index.js';
+import type { Options } from './types/index.js';
 import { defaultTransitionKeys, defaultTransitions } from './utils/defaults.js';
 import { objectKeys } from './utils/helper.js';
 

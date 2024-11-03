@@ -8,7 +8,7 @@
 // } from '../types';
 
 import { spring } from '@motionone/dom';
-import { KeyframeOptions } from '@motionone/types';
+import type { KeyframeOptions } from '@motionone/types';
 
 import { objectKeys } from './helper';
 

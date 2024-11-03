@@ -9,6 +9,7 @@
     "start": "vinxi start"
   },
   "dependencies": {
+    "@solid-primitives/props": "^3.1.11",
     "@solidjs/router": "^0.14.7",
     "@solidjs/start": "^1.0.8",
     "autoprefixer": "^10.4.19",

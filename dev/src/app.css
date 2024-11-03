@@ -2,7 +2,31 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: iiter;
+  src: url(https://nextui.org/_next/static/media/a34f9d1faa5f3315-s.p.woff2);
+}
+
 :root {
+  font-family:
+    iiter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    'Helvetica Neue',
+    Arial,
+    'Noto Sans',
+    sans-serif,
+    'Apple Color Emoji',
+    'Segoe UI Emoji',
+    'Segoe UI Symbol',
+    'Noto Color Emoji';
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: auto;
+  -webkit-tap-highlight-color: transparent;
   --background-rgb: 0, 0, 0;
   --foreground-rgb: 255, 255, 255;
 }

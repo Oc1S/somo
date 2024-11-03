@@ -1,8 +1,7 @@
 import type { JSX, ParentProps } from 'solid-js';
 import type * as motionone from '@motionone/dom';
 import type { PropertiesHyphen } from 'csstype';
-
-export type { Options, VariantDefinition } from '@motionone/dom';
+export type { Options } from '@motionone/dom';
 
 export interface MotionEventHandlers {
   onMotionStart?: (event: motionone.MotionEvent) => void;
@@ -33,13 +32,17 @@ declare module '@motionone/dom' {
   }
 }
 
-export type MotionComponentProps<T extends keyof JSX.IntrinsicElements = 'div'> = ParentProps<
+export type HElements = keyof JSX.IntrinsicElements;
+// export only here so the `JSX` import won't be shaken off the tree:
+export type E = JSX.Element;
+
+export type MotionProps<T extends HElements = 'div'> = ParentProps<
   JSX.IntrinsicElements[T] &
     MotionEventHandlers &
     motionone.Options & {
       ref?: any;
       tag?: string;
-      /* TODO: */
+      /* TODO:whiles */
       whileTap?: motionone.VariantDefinition;
       whileFocus?: motionone.VariantDefinition;
       whileHover?: motionone.VariantDefinition;
@@ -57,15 +60,12 @@ export type MotionComponentProps<T extends keyof JSX.IntrinsicElements = 'div'> 
 //   ): JSX.Element;
 // };
 
-export type MotionComponent<T extends keyof JSX.IntrinsicElements = 'div'> = (
-  props: JSX.IntrinsicElements[T] & MotionComponentProps,
-) => JSX.Element;
+export type IMotionComponent<T extends HElements = 'div'> = (props: MotionProps<T>) => JSX.Element;
 
-export type MotionProxyComponent<T> = (props: T & MotionComponentProps) => JSX.Element;
-
-export type MotionProxy = MotionComponent & {
-  // <Motion.div />
-  [K in keyof JSX.IntrinsicElements]: MotionProxyComponent<JSX.IntrinsicElements[K]>;
+/* proxy type defination */
+export type MotionProxy = IMotionComponent & {
+  // form as <Motion.div />
+  [K in HElements]: IMotionComponent<K>;
 };
 
 declare module 'solid-js' {
@@ -75,6 +75,3 @@ declare module 'solid-js' {
     }
   }
 }
-
-// export only here so the `JSX` import won't be shaken off the tree:
-export type E = JSX.Element;

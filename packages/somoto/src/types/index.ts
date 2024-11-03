@@ -35,12 +35,12 @@ export interface ToastClassnames {
   closeButton?: string;
   cancelButton?: string;
   actionButton?: string;
+  default?: string;
   success?: string;
   error?: string;
   info?: string;
   warning?: string;
   loading?: string;
-  default?: string;
   content?: string;
   icon?: string;
 }
