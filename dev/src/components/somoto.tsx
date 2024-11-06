@@ -20,13 +20,6 @@ export const Somoto = () => {
 
   const message = () => `Hello World_${index++}!`;
 
-  createEffect(
-    on([type, position], (type, position) => {
-      console.log(type, position);
-      showToast();
-    }),
-  );
-
   const showToast = () => {
     switch (type()) {
       case 'default':
@@ -78,7 +71,16 @@ export const Somoto = () => {
         <div class="flex gap-4">
           <For each={types}>
             {type => {
-              return <Button onClick={() => setType(type)}>{type}</Button>;
+              return (
+                <Button
+                  onClick={() => {
+                    setType(type);
+                    showToast();
+                  }}
+                >
+                  {type}
+                </Button>
+              );
             }}
           </For>
         </div>
@@ -86,7 +88,16 @@ export const Somoto = () => {
         <div class="flex gap-4">
           <For each={positions}>
             {position => {
-              return <Button onClick={() => setPosition(position)}>{position}</Button>;
+              return (
+                <Button
+                  onClick={() => {
+                    setPosition(position);
+                    showToast();
+                  }}
+                >
+                  {position}
+                </Button>
+              );
             }}
           </For>
         </div>
