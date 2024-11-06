@@ -1,4 +1,4 @@
-import { createEffect, createSignal, For, on } from 'solid-js';
+import { createSignal, For } from 'solid-js';
 import { toast, Toaster } from 'somoto';
 
 import { Button } from './ui/button';
