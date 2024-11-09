@@ -3,8 +3,8 @@
   "private": true,
   "scripts": {
     "build": "turbo build",
-    "dev": "turbo dev --filter=somoto --filter=somo --filter=somo-dev",
-    "dev:doc": "turbo dev --filter=somoto --filter=somo --filter=docs",
+    "dev": "turbo dev --filter=somoto --filter=somo --filter=somo-dev --filter=somo-shared",
+    "dev:doc": "turbo dev --filter=somoto --filter=somo --filter=docs --filter=somo-shared",
     "lint": "turbo lint",
     "type-check": "turbo type-check",
     "clean": "turbo clean",

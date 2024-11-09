@@ -10,7 +10,7 @@ console.log(`🚀 ${pkg.name} v${pkg.version} - ${pkg.description}`);
 export default defineConfig({
   integrations: [
     starlight({
-      title: 'Somo',
+      title: 'Somoto',
       components: {
         ThemeProvider: './src/components/theme/theme-provider/index.astro',
         ThemeSelect: './src/components/theme/theme-select/index.astro',

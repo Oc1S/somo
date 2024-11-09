@@ -1,7 +1,7 @@
 {
   "name": "somo-shared",
   "version": "0.0.0",
-  "description": "SolidJS Motion",
+  "description": "Somo shared",
   "license": "MIT",
   "author": "Oc1s",
   "repository": {
@@ -18,11 +18,43 @@
   "private": false,
   "sideEffects": false,
   "type": "module",
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
+  "main": "./dist/server.js",
+  "module": "./dist/server.js",
   "types": "./dist/index.d.ts",
-  "browser": {},
+  "browser": {
+    "./dist/server.js": "./dist/index.js"
+  },
   "exports": {
+    "worker": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/server.js"
+      }
+    },
+    "browser": {
+      "development": {
+        "import": {
+          "types": "./dist/index.d.ts",
+          "default": "./dist/dev.js"
+        }
+      },
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "deno": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/server.js"
+      }
+    },
+    "node": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/server.js"
+      }
+    },
     "development": {
       "import": {
         "types": "./dist/index.d.ts",
@@ -49,18 +81,12 @@
     "update-deps": "pnpm up -Li"
   },
   "dependencies": {
-    "lodash-es": "^4.17.21"
+    "somo": "*"
   },
   "devDependencies": {
     "@types/node": "^22.7.4",
-    "@typescript-eslint/eslint-plugin": "^7.9.0",
-    "@typescript-eslint/parser": "^7.9.0",
     "autoprefixer": "^10.4.19",
     "esbuild": "^0.21.3",
-    "esbuild-plugin-solid": "^0.6.0",
-    "eslint-plugin-eslint-comments": "^3.2.0",
-    "eslint-plugin-no-only-tests": "^3.1.0",
-    "eslint-plugin-simple-import-sort": "^12.1.0",
     "jsdom": "^24.0.0",
     "postcss": "^8.4.38",
     "solid-js": "^1.9.1",
