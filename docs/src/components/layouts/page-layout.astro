@@ -1,0 +1,23 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+}
+import '../../app.css';
+const { title = 'Somoto', description = 'Somoto,SolidJS,toast,component' } = Astro.props;
+---
+
+<!doctype html>
+<html lang='en'>
+  <head>
+    <meta charset='utf-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1' />
+    <meta name='description' content={description} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <div class='flex flex-col items-center'>
+      <slot />
+    </div>
+  </body>
+</html>

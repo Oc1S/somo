@@ -12,8 +12,8 @@ export default defineConfig({
     starlight({
       title: 'Somo',
       components: {
-        ThemeProvider: './src/components/Theme/ThemeProvider/index.astro',
-        ThemeSelect: './src/components/Theme/ThemeSelect/index.astro',
+        ThemeProvider: './src/components/theme/ThemeProvider/index.astro',
+        ThemeSelect: './src/components/theme/ThemeSelect/index.astro',
       },
       social: {
         github: 'https://github.com/withastro/starlight',

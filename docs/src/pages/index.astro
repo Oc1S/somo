@@ -1,8 +1,7 @@
 ---
-// title: 'hi';
-import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import PageLayout from '../components/layouts/page-layout.astro';
 ---
 
-<StarlightPage frontmatter={{ title: 'Somoto', template: 'splash' }}>
-  <p>This is a custom page with a custom component:</p>
-</StarlightPage>
+<PageLayout>
+  <h1>Somoto</h1>
+</PageLayout>
