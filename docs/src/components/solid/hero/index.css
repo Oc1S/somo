@@ -1,0 +1,11 @@
+.toast-wrapper {
+  mask-image: linear-gradient(to top, transparent 0%, #000 35%);
+}
+
+.toast:nth-child(1) {
+  transform: translateY(-60%) translateX(-50%) scale(0.9);
+}
+
+.toast:nth-child(2) {
+  transform: translateY(-30%) translateX(-50%) scale(0.95);
+}

@@ -16,7 +16,10 @@ const gray = {
 
 const config: Config = {
   presets: [sharedConfig],
-  content: ['./src/**/*.{astro,html,js,jsx,md,mdx,ts,tsx}'],
+  content: [
+    './src/**/*.{astro,html,js,jsx,md,mdx,ts,tsx}',
+    '../node_modules/@repo/shared/dist/**/*.{js,ts,jsx,tsx}',
+  ],
   plugins: [starlightPlugin()],
   theme: {
     extend: {
