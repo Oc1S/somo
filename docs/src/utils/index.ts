@@ -1,2 +1,2 @@
-export * from './helper'
-export * from './getDemoCode'
+export * from './getDemoCode';
+export * from './helper';

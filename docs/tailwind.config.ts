@@ -15,6 +15,7 @@ const gray = {
 };
 
 const config: Config = {
+  presets: [sharedConfig],
   content: ['./src/**/*.{astro,html,js,jsx,md,mdx,ts,tsx}'],
   plugins: [starlightPlugin()],
   theme: {
@@ -22,7 +23,6 @@ const config: Config = {
       colors: { accent, gray },
     },
   },
-  presets: [sharedConfig],
 };
 
 export default config;
