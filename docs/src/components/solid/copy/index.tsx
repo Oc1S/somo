@@ -1,5 +1,5 @@
 import type { Component, JSX } from 'solid-js';
-import { createSignal, onCleanup, Show } from 'solid-js';
+import { createSignal, onCleanup, Show, splitProps } from 'solid-js';
 import { combineProps } from '@solid-primitives/props';
 import copy from 'copy-to-clipboard';
 import { m, Presence } from 'somo';
@@ -12,38 +12,63 @@ const variants = {
 };
 
 export const Copy: Component<
-  JSX.ButtonHTMLAttributes<HTMLButtonElement> & { content: string }
+  JSX.ButtonHTMLAttributes<HTMLButtonElement> & {
+    content: string;
+  }
 > = props => {
-  const [copying, setCopying] = createSignal(0);
+  const [, domProps] = splitProps(props, ['content']);
+  const [copying, setCopying] = createSignal(false);
 
+  let timer: ReturnType<typeof setTimeout>;
   const onCopy = () => {
     copy(props.content);
-    setCopying(c => c + 1);
-    const timer = setTimeout(() => {
-      setCopying(c => c - 1);
+    if (copying()) return;
+    setCopying(true);
+    timer = setTimeout(() => {
+      setCopying(false);
     }, 2000);
-    onCleanup(() => clearTimeout(timer));
   };
+  onCleanup(() => {
+    clearTimeout(timer);
+  });
 
   const combined = combineProps(
     {
+      class:
+        'flex h-[26px] w-[26px] items-center cursor-pointer justify-center rounded-md border text-[#eeeeee] transition duration-200 bg-transparent border-[#303030] focus-visible:opacity-100 focus-visible:shadow-[0_0_0_1px_#303030]',
       onClick: onCopy,
     },
-    props,
+    domProps,
   );
 
   return (
-    <button aria-label="Copy code" {...combined}>
+    <button aria-label="Copy code" {...combined} data-copying={copying()}>
       <Presence initial={false} mode="out-in">
         <Show
           when={copying()}
           fallback={
-            <m.div animate="visible" exit="hidden" initial="hidden" variants={variants}>
+            <m.div
+              initial={variants.hidden}
+              animate={variants.visible}
+              exit={variants.hidden}
+              transition={{
+                duration: 0.15,
+              }}
+              class="flex"
+            >
               <Clipboard />
             </m.div>
           }
         >
-          <m.div animate="visible" exit="hidden" initial="hidden" variants={variants}>
+          <m.div
+            initial={variants.hidden}
+            animate={variants.visible}
+            exit={variants.hidden}
+            transition={{
+              duration: 0.15,
+            }}
+            class="flex"
+          >
             <Check />
           </m.div>
         </Show>

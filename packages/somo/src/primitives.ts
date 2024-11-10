@@ -12,6 +12,29 @@ import type { Options } from './types/index.js';
 import { defaultTransitionKeys, defaultTransitions } from './utils/defaults.js';
 import { objectKeys } from './utils/helper.js';
 
+const generateTransition = (options: Options) => {
+  const keys = new Set<string>();
+  objectKeys(options).forEach(key => {
+    const variantDef = options[key];
+    isObject(variantDef) &&
+      objectKeys(variantDef as object).forEach(k => {
+        keys.add(k);
+      });
+  });
+
+  const defaultTransition = [...keys].reduce(
+    (obj, key: keyof typeof defaultTransitions) => {
+      if (defaultTransitionKeys.has(key)) {
+        obj[key] = defaultTransitions[key]();
+      }
+      return obj;
+    },
+    {} as Record<string, KeyframeOptions>,
+  );
+
+  return defaultTransition;
+};
+
 /** @internal */
 export function createAndBindMotionState(
   el: () => Element,
@@ -23,32 +46,8 @@ export function createAndBindMotionState(
 
   const computedOptions = createMemo(() => {
     const $options = { ...options() };
-    const keys = new Set<string>();
-    objectKeys($options).forEach(key => {
-      const variantDef = $options[key];
-      isObject(variantDef) &&
-        objectKeys(variantDef as object).forEach(k => {
-          keys.add(k);
-        });
-    });
-
-    const defaultTransition = [...keys].reduce(
-      (obj, key: keyof typeof defaultTransitions) => {
-        if (defaultTransitionKeys.has(key)) {
-          obj[key] = defaultTransitions[key]();
-        }
-        return obj;
-      },
-      {} as Record<string, KeyframeOptions>,
-    );
-
-    $options.transition = Object.assign(
-      {},
-      defaultTransition,
-      /* from context */
-      contextConfig.transition,
-      $options.transition ?? {},
-    );
+    $options.transition =
+      $options.transition || contextConfig.transition || generateTransition($options);
     return $options;
   });
 

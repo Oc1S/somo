@@ -14,7 +14,8 @@
   h2,
   h3,
   h4,
-  h5 {
+  h5,
+  p {
     margin: 0;
   }
 
@@ -75,6 +76,8 @@
 }
 
 :root {
+  --font-mono: 'SF Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono,
+    Courier New, monospace;
   --gray0: #000;
   --gray1: hsl(0, 0%, 9.5%);
   --gray2: hsl(0, 0%, 10.5%);
@@ -100,6 +103,10 @@ body {
 
 button {
   font-family: 'Noto Sans';
+}
+
+pre {
+  margin: 0;
 }
 
 code {

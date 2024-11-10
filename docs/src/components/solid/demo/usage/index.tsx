@@ -1,11 +1,7 @@
 import { CodeBlock } from '../../code-block';
+import { ContentBlock } from '../../content-block';
 
-export const Usage = () => {
-  return (
-    <div>
-      <h2>Usage</h2>
-      <p>Render the toaster in the root of your app.</p>
-      <CodeBlock>{`import { Toaster, toast } from 'sonner'
+const snipper = `import { Toaster, toast } from 'somoto'
 
 function App() {
   return (
@@ -16,7 +12,13 @@ function App() {
       </button>
     </div>
   )
-}`}</CodeBlock>
-    </div>
+}`;
+
+export const Usage = () => {
+  return (
+    <ContentBlock title="Usage">
+      <p class="my-2">Render the toaster in the root of your app.</p>
+      <CodeBlock>{snipper}</CodeBlock>
+    </ContentBlock>
   );
 };

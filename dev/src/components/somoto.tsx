@@ -102,7 +102,7 @@ export const Somoto = () => {
           </For>
         </div>
       </div>
-      <Toaster position={position()}></Toaster>
+      <Toaster position={position()} />
     </>
   );
 };
@@ -110,7 +110,7 @@ export const Somoto = () => {
 export default function SomotoTest() {
   return (
     <>
-      <Somoto></Somoto>
+      <Somoto />
     </>
   );
 }

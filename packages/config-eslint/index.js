@@ -48,5 +48,9 @@ module.exports = {
     '@typescript-eslint/no-useless-empty-export': 'warn',
     'no-only-tests/no-only-tests': 'warn',
     'eslint-comments/no-unused-disable': 'warn',
+    'solid/reactivity': 'off',
+    'no-undef': 'off',
+    '@typescript-eslint/no-unused-expressions': 'off',
+    '@typescript-eslint/no-explicit-any': 'off',
   },
 };
