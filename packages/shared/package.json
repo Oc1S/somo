@@ -81,6 +81,7 @@
     "update-deps": "pnpm up -Li"
   },
   "dependencies": {
+    "cva": "npm:class-variance-authority",
     "somo": "*"
   },
   "devDependencies": {

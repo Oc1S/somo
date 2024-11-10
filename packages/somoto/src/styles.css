@@ -27,7 +27,7 @@
 :where([data-somoto-toaster]) {
   position: fixed;
   width: var(--width);
-  font-family:
+  /* font-family:
     ui-sans-serif,
     system-ui,
     -apple-system,
@@ -41,7 +41,7 @@
     Apple Color Emoji,
     Segoe UI Emoji,
     Segoe UI Symbol,
-    Noto Color Emoji;
+    Noto Color Emoji; */
   --gray1: hsl(0, 0%, 99%);
   --gray2: hsl(0, 0%, 97.3%);
   --gray3: hsl(0, 0%, 95.1%);

@@ -1,7 +1,18 @@
 module.exports = {
   parser: '@typescript-eslint/parser',
-  plugins: ['@typescript-eslint', 'no-only-tests', 'eslint-comments', 'simple-import-sort'],
+  plugins: [
+    '@typescript-eslint',
+    'no-only-tests',
+    'eslint-comments',
+    'simple-import-sort',
+    'solid',
+  ],
   ignorePatterns: ['node_modules', 'dist', 'dev', 'tsup.config.ts', 'vitest.config.ts'],
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:solid/recommended',
+  ],
   rules: {
     'simple-import-sort/imports': [
       'warn',

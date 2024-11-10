@@ -49,7 +49,6 @@ export function createAndBindMotionState(
       contextConfig.transition,
       $options.transition ?? {},
     );
-    console.log('debug@transition', defaultTransition, $options.transition);
     return $options;
   });
 

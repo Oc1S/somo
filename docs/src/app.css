@@ -1,6 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* @font-face {
+  font-family: Noto-Sans;
+  src: url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
+} */
 
 @layer base {
   h1,
@@ -67,7 +74,13 @@
   box-sizing: border-box;
 }
 
+button {
+  font-family: 'Noto Sans';
+}
+
 body {
+  font-family: 'Noto Sans', sans-serif;
+  font-optical-sizing: auto;
   font-size: 16px;
   background-color: #000;
   color: #fff;

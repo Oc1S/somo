@@ -140,7 +140,7 @@ export const Toaster: Component<ToasterProps> = p => {
           setActualTheme('light');
         }
       });
-    } catch (error) {
+    } catch {
       // Safari < 14
       darkMediaQuery.addListener(({ matches }) => {
         try {
@@ -195,10 +195,6 @@ export const Toaster: Component<ToasterProps> = p => {
         }
       });
     }
-  });
-
-  createEffect(() => {
-    console.log('toasts:', toasts());
   });
 
   return (
