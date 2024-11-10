@@ -23,7 +23,7 @@ export const Somoto = () => {
         closeButton={closeButton()}
       />
       <Hero />
-      <div class="flex flex-col items-center gap-8">
+      <div class="flex w-[40rem] flex-col gap-8">
         <Installation />
         <Usage />
         <Types />

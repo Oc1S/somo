@@ -93,7 +93,7 @@ toast.promise(promise, {
 export const Types = () => {
   const [currentType, setCurrentType] = createSignal<(typeof types)[number]>(types[0]);
   return (
-    <div class="flex gap-4">
+    <div class="flex flex-wrap gap-4">
       <For each={types}>
         {type => {
           const active = () => type === currentType();

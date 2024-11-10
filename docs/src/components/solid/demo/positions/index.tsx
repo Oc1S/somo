@@ -22,7 +22,7 @@ export const Positions: Component<{
     toasts().forEach(t => toast.dismiss(t.id));
   }
   return (
-    <div class="flex gap-4">
+    <div class="flex flex-wrap gap-4">
       <For each={positions}>
         {position => {
           const active = () => position === props.position;

@@ -5,7 +5,6 @@
   font-family: var(--font-mono);
   font-size: 14px;
   position: relative;
-  cursor: copy;
   height: 40px;
   border: 1px solid var(--gray3);
   display: flex;
