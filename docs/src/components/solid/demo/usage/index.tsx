@@ -1,5 +1,5 @@
 import { CodeBlock } from '../../code-block';
-import { ContentBlock } from '../../content-block';
+import { ContentLayout } from '../../layout';
 
 const snipper = `import { Toaster, toast } from 'somoto'
 
@@ -16,9 +16,12 @@ function App() {
 
 export const Usage = () => {
   return (
-    <ContentBlock title="Usage">
-      <p class="my-2">Render the toaster in the root of your app.</p>
+    <ContentLayout.Wrapper title="Usage">
+      <ContentLayout.Description>
+        Render <span class="rounded bg-[#111] p-2 py-0.5 text-sm">{'<Toaster/>'}</span> in the root
+        of your app.
+      </ContentLayout.Description>
       <CodeBlock>{snipper}</CodeBlock>
-    </ContentBlock>
+    </ContentLayout.Wrapper>
   );
 };

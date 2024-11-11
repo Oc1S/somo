@@ -319,7 +319,7 @@ export const Toast = (p: ToastProps) => {
       )}
       data-somoto-toast=""
       data-rich-colors={props.toast.richColors ?? props.defaultRichColors}
-      data-styled={!Boolean(props.toast.jsx || props.toast.unstyled || props.unstyled)}
+      data-styled={!(props.toast.jsx || props.toast.unstyled || props.unstyled)}
       data-mounted={mounted()}
       data-promise={Boolean(toast.promise)}
       data-removed={removed()}

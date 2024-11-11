@@ -18,9 +18,9 @@ export const getIcon = (type: ToastVariants): JSX.Element | null => {
   }
 };
 
-export const Loading = ({ visible }: { visible: boolean }) => {
+export const Loading = (props: { visible: boolean }) => {
   return (
-    <div class="somoto-loading-wrapper" data-visible={visible}>
+    <div class="somoto-loading-wrapper" data-visible={props.visible}>
       <div class="somoto-spinner">
         <For each={Array(12).fill(0)}>{() => <div class="somoto-loading-bar" />}</For>
       </div>
@@ -104,7 +104,7 @@ export const CloseIcon = () => (
     stroke-linecap="round"
     stroke-linejoin="round"
   >
-    <line x1="18" y1="6" x2="6" y2="18"></line>
-    <line x1="6" y1="6" x2="18" y2="18"></line>
+    <line x1="18" y1="6" x2="6" y2="18" />
+    <line x1="6" y1="6" x2="18" y2="18" />
   </svg>
 );

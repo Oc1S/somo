@@ -1,11 +1,11 @@
 import { CodeBlock } from '../../code-block';
-import { ContentBlock } from '../../content-block';
+import { ContentLayout } from '../../layout';
 
 export const Installation = () => {
   const content = 'npm install somoto';
   return (
-    <ContentBlock title="Installation">
+    <ContentLayout.Wrapper title="Installation">
       <CodeBlock>{content}</CodeBlock>
-    </ContentBlock>
+    </ContentLayout.Wrapper>
   );
 };

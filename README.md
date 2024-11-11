@@ -17,7 +17,7 @@ pnpm add somo
 
 Use it:
 
-```tsx
+```jsx
 import { motion } from 'somo';
 ```
 

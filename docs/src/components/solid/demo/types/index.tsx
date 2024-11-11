@@ -2,7 +2,10 @@ import { createSignal, For } from 'solid-js';
 import { Button } from '@repo/shared';
 import { toast } from 'somoto';
 
-const promiseCode = '`${data.name} toast has been added`';
+import { CodeBlock } from '../../code-block';
+import { ContentLayout } from '../../layout';
+
+const promiseCode = '`${data.name} has been done`';
 const types = [
   {
     name: 'Default',
@@ -57,27 +60,33 @@ const types = [
   },
   {
     name: 'Promise',
-    snippet: `const promise = () => new Promise((resolve) => setTimeout(() => resolve({ name: 'Somoto' }), 2000));
-
-toast.promise(promise, {
-  loading: 'Loading...',
-  success: (data) => {
-    return ${promiseCode};
+    snippet: `toast.promise<{ name: string }>(
+  () =>
+    new Promise(resolve => {
+      setTimeout(() => {
+        resolve({ name: 'Cook' });
+      }, 2000);
+    }),
+  {
+    loading: 'Loading...',
+    success: data => {
+      return ${promiseCode};
+    },
+    error: 'Error',
   },
-  error: 'Error',
-});`,
+),`,
     action: () =>
       toast.promise<{ name: string }>(
         () =>
           new Promise(resolve => {
             setTimeout(() => {
-              resolve({ name: 'Somoto' });
+              resolve({ name: 'Cook' });
             }, 2000);
           }),
         {
           loading: 'Loading...',
           success: data => {
-            return `${data.name} toast has been added`;
+            return `${data.name} has been done`;
           },
           error: 'Error',
         },
@@ -93,23 +102,29 @@ toast.promise(promise, {
 export const Types = () => {
   const [currentType, setCurrentType] = createSignal<(typeof types)[number]>(types[0]);
   return (
-    <div class="flex flex-wrap gap-4">
-      <For each={types}>
-        {type => {
-          const active = () => type === currentType();
-          return (
-            <Button
-              class={active() ? 'bg-gray-200' : ''}
-              onClick={() => {
-                type.action();
-                setCurrentType(type);
-              }}
-            >
-              {type.name}
-            </Button>
-          );
-        }}
-      </For>
-    </div>
+    <ContentLayout.Wrapper title="Types">
+      <ContentLayout.Description>
+        <p>Swipe direction changes depending on the position.</p>
+      </ContentLayout.Description>
+      <ContentLayout.ButtonGroup>
+        <For each={types}>
+          {type => {
+            const active = () => type === currentType();
+            return (
+              <Button
+                class={active() ? 'bg-gray-200' : ''}
+                onClick={() => {
+                  type.action();
+                  setCurrentType(type);
+                }}
+              >
+                {type.name}
+              </Button>
+            );
+          }}
+        </For>
+      </ContentLayout.ButtonGroup>
+      <CodeBlock>{`${currentType().snippet}`}</CodeBlock>
+    </ContentLayout.Wrapper>
   );
 };

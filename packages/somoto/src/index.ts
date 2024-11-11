@@ -1,7 +1,8 @@
 import { Toaster } from './components/toaster';
 import { toast } from './state';
-import { ExternalToast, ToasterProps, ToastType } from './types';
+import type { ExternalToast, ToasterProps, ToastType } from './types';
 
-export { type ExternalToast, toast, Toaster, type ToasterProps, type ToastType };
+export { toast, Toaster };
 export { useSomoto } from './hooks/use-somoto';
-export { type Action, type ToastClassnames, type ToastToDismiss } from './types';
+export type { ExternalToast, ToasterProps, ToastType };
+export type { Action, ToastClassnames, ToastToDismiss } from './types';
