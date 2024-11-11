@@ -47,7 +47,7 @@ export const Other = (props: {
       name: 'Close Button',
       snippet: `toast('Event has been created', {
   description: 'Monday, January 3rd at 6:00pm',
-  })`,
+})`,
       action: () => {
         toast('Event has been created', {
           description: 'Monday, January 3rd at 6:00pm',
@@ -59,10 +59,10 @@ export const Other = (props: {
       name: 'Headless',
       snippet: `toast.custom((t) => (
   <div>
-  <h1>Custom toast</h1>
-   <button onClick={() => toast.dismiss(t)}>Dismiss</button>
+    <h1>Custom toast</h1>
+    <button onClick={() => toast.dismiss(t)}>Dismiss</button>
   </div>
-  ));`,
+));`,
       action: () => {
         toast.custom(
           t => (

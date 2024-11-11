@@ -1,0 +1,69 @@
+---
+title: Getting Started
+---
+
+import { Tab, Tabs, Cards, Card, Steps } from 'nextra-theme-docs';
+import { toast } from 'somoto';
+
+# Getting Started
+
+This guide will help you get started with Somoto.
+Sonner is good. So i think there should be a toast library for SolidJS.
+
+<Steps>
+### Install
+
+<Tabs items={['pnpm', 'npm', 'yarn', 'bun']}>
+  <Tab>
+    ```bash
+    pnpm i somoto
+    ```
+
+  </Tab>
+  <Tab>
+    ```bash
+    npm i somoto
+    ```
+  </Tab>
+  <Tab>
+    ```bash
+    yarn add somoto
+    ```
+  </Tab>
+    <Tab>
+    ```bash
+    bun add somoto
+    ```
+  </Tab>
+</Tabs>
+
+### Add Toaster to your app
+
+It can be placed anywhere, even in server components such as `layout.tsx`.
+
+```tsx
+import { Toaster } from 'somoto';
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <body>
+        {children}
+        <Toaster />
+      </body>
+    </html>
+  );
+}
+```
+
+### Render a toast
+
+```tsx
+import { toast } from 'somoto';
+
+function MyToast() {
+  return <button onClick={() => toast('This is a somoto toast')}>Render my toast</button>;
+}
+```
+
+</Steps>
