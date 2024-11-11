@@ -2,11 +2,11 @@ import type { JSX, ParentComponent } from 'solid-js';
 import { combineProps } from '@solid-primitives/props';
 
 const Wrapper: ParentComponent<{
-  title: JSX.Element;
+  title: string;
 }> = props => {
   return (
     <div>
-      <div class="my-2 text-2xl font-bold">{props.title}</div>
+      <div class="my-4 flex text-2xl font-bold">{props.title}</div>
       {props.children}
     </div>
   );

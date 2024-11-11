@@ -1,13 +1,3 @@
-ol[dir='ltr'] .headlessClose {
-  --headless-close-start: unset;
-  --headless-close-end: 6px;
-}
-
-ol[dir='rtl'] .headlessClose {
-  --headless-close-start: 6px;
-  --headless-close-end: unset;
-}
-
 .headless {
   padding: 16px;
   width: 356px;
@@ -42,8 +32,7 @@ ol[dir='rtl'] .headlessClose {
   display: flex;
   justify-content: center;
   align-items: center;
-  left: var(--headless-close-start);
-  right: var(--headless-close-end);
+  right: 6px;
   color: var(--gray10);
   padding: 0;
   background: transparent;

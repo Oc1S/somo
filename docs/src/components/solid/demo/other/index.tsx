@@ -76,7 +76,7 @@ export const Other = (props: {
               </button>
             </div>
           ),
-          { duration: 999999 },
+          { duration: 99999 },
         );
         props.setCloseButton(t => !t);
       },
