@@ -2,8 +2,6 @@
 title: Toaster
 ---
 
-# Toaster
-
 This component renders all the toasts, you can place it anywhere in your app.
 
 ## Customization
@@ -53,12 +51,12 @@ Changes the directionality of the toast's text.
 
 ## API Reference
 
-| Property              |                                                           Description                                                           |                             Default |
-| :-------------------- | :-----------------------------------------------------------------------------------------------------------------------------: | ----------------------------------: |
-| theme                 |                                       Toast's theme, either `light`, `dark`, or `system`                                        |                             `light` |
-| richColors            |                                           Makes error and success state more colorful                                           |                             `false` |
-| expand                |                                               Toasts will be expanded by default                                                |                             `false` |
-| visibleToasts         |                                                    Amount of visible toasts                                                     |                                 `3` |
+| Property              |      Description       |    Default |
+| :--- | :-----------: | ------------: |
+| theme                 |     Toast's theme, either `light`, `dark`, or `system`      |           `light` |
+| richColors            |      Makes error and success state more colorful         |     `false` |
+| expand                |       Toasts will be expanded by default          |                             `false` |
+| visibleToasts         |       Amount of visible toasts     |                                 `3` |
 | position              |                                             Place where the toasts will be rendered                                             |                      `bottom-right` |
 | closeButton           |                                                Adds a close button to all toasts                                                |                             `false` |
 | offset                |                                              Offset from the edges of the screen.                                               |                              `32px` |
@@ -70,4 +68,3 @@ Changes the directionality of the toast's text.
 | loadingIcon           |                                                Changes the default loading icon                                                 |                                 `-` |
 | pauseWhenPageIsHidden | Pauses toast timers when the page is hidden, e.g., when the tab is backgrounded, the browser is minimized, or the OS is locked. |                             `false` |
 | icons                 |                                                    Changes the default icons                                                    |                                 `-` |
-| cn                    |                                        Custom function for constructing/merging classes.                                        | `classes.filter(Boolean).join(' ')` |

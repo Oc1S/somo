@@ -16,7 +16,7 @@ export default defineConfig({
         ThemeSelect: './src/components/theme/theme-select/index.astro',
       },
       social: {
-        github: 'https://github.com/withastro/starlight',
+        github: 'https://github.com/Oc1S/somo',
       },
       customCss: ['./src/app.css'],
       // sidebar: [
