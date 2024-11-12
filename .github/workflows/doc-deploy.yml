@@ -1,0 +1,49 @@
+name: deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - gh-pages
+    # https://docs.github.com/zh/actions/using-workflows/workflow-syntax-for-github-actions#on
+
+jobs:
+  build:
+    name: build docs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: 构建
+        run: pnpm build
+
+      - name: upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/build
+
+  deploy:
+    name: 部署到 GitHub Pages
+    needs: build
+
+    permissions:
+      pages: write # to deploy to Pages
+      id-token: write # validate source
+
+    # 部署到 Github Pages 环境
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
