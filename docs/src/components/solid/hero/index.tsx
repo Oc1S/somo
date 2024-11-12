@@ -32,7 +32,7 @@ export const Hero = () => {
         >
           Render A Toast
         </Button>
-        <Button type="" href="https://github.com/Oc1S/somo" target="_blank">
+        <Button as="a" href="https://github.com/Oc1S/somo" target="_blank">
           Github
         </Button>
       </div>

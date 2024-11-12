@@ -1,4 +1,4 @@
-import type { Component, ComponentProps } from 'solid-js';
+import type { ComponentProps } from 'solid-js';
 import { createSignal, splitProps } from 'solid-js';
 import { Dynamic } from 'solid-js/web';
 import { combineProps } from '@solid-primitives/props';
@@ -20,13 +20,16 @@ const buttonVariants = cva(
   },
 );
 
-export type ButtonProps<T extends 'a' | 'button' = 'button'> = VariantProps<typeof buttonVariants> &
+type ButtonType = 'a' | 'button';
+export type ButtonProps<T extends ButtonType> = VariantProps<typeof buttonVariants> &
   ComponentProps<T>;
 
-export const Button = <T, U extends 'a' | 'button' = T extends { href: string } ? 'a' : 'button'>(
-  props: T & ButtonProps<U>,
+export const Button = <T extends ButtonType = 'button'>(
+  props: ButtonProps<T> & {
+    as?: T;
+  },
 ) => {
-  const [, domProps] = splitProps(props, ['class', 'variant']);
+  const [, domProps] = splitProps(props, ['class', 'variant', 'as']);
   const combined = combineProps(
     {
       onPointerDown: () => setPressed(true),
@@ -34,10 +37,10 @@ export const Button = <T, U extends 'a' | 'button' = T extends { href: string } 
       onPointerLeave: () => setPressed(false),
     },
     domProps,
-  );
+  ) as unknown as ButtonProps<T>;
   const [pressed, setPressed] = createSignal(false);
 
-  const component = () => ('href' in props ? m.a : m.button);
+  const component = () => (props.as === 'a' ? m.a : m.button);
   return (
     <Dynamic
       data-pressed={pressed()}
