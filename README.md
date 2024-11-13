@@ -2,6 +2,8 @@
 
 > A SolidJS port for [Sonner](https://github.com/emilkowalski/sonner).
 
+somoto is a taost library for SolidJS.
+
 For demonstration, please visit The [site](https://oc1s.github.io/somo/).
 
 ## Quick start
