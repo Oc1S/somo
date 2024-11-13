@@ -1,6 +1,7 @@
 {
   "name": "repo-root",
   "private": true,
+  "description": "root of the monorepo, for somo & somoto",
   "author": {
     "name": "Oc1s",
     "email": "ocis.chan@gmail.com"
