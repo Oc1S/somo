@@ -15,21 +15,20 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: pnpm/action-setup@v4
-        name: Install pnpm
+      - uses: actions/setup-node@v4
         with:
-          version: 9
-          run_install: false
+          node-version: 20
+          cache: yarn
 
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: pnpm
+          cache: yarn
 
       - name: install dependencies
-        run: pnpm install --frozen-lockfile
+        run: yarn install --frozen-lockfile
       - name: build
-        run: pnpm build
+        run: yarn build
 
       - name: upload artifact
         uses: actions/upload-pages-artifact@v3
