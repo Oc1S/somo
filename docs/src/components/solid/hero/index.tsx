@@ -36,7 +36,10 @@ export const Hero = () => {
           Github
         </Button>
       </div>
-      <a href="/getting-started" class="mt-4 text-sm transition duration-200 hover:text-[#ddd]">
+      <a
+        href="/somo/getting-started"
+        class="mt-4 text-sm transition duration-200 hover:text-[#ddd]"
+      >
         Documentation
       </a>
     </div>
