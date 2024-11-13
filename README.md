@@ -1,24 +1,38 @@
-# somo
+# somoto
 
-> **Note** After using this template, you have to search and replace all `somo` and similar strings
-> with appropriate texts.
+> A SolidJS port for [Sonner](https://github.com/emilkowalski/sonner).
+
+For demonstration, please visit The [site](https://github.com/Oc1S/somo).
 
 ## Quick start
 
-Install it:
+### Install:
 
 ```bash
-npm i somo
+npm i somoto
 # or
-yarn add somo
+yarn add somoto
 # or
-pnpm add somo
+pnpm add somoto
+# or
+bun add smoto
 ```
 
-Use it:
+### Usage:
 
 ```jsx
-import { motion } from 'somo';
+import { Toaster, toast } from 'somoto';
+
+function App() {
+  return (
+    <div>
+      <Toaster />
+      <button onClick={() => toast('Toast for you!')}>Give me a toast</button>
+    </div>
+  );
+}
 ```
 
-## Road map
+## Quick start
+
+Find API references in the [doc](https://github.com/Oc1S/somo).

@@ -6,11 +6,11 @@
   "author": "Oc1s",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/oc1s/somo.git"
+    "url": "git+https://github.com/oc1s/somoto.git"
   },
-  "homepage": "https://github.com/oc1s/somo#readme",
+  "homepage": "https://github.com/oc1s/somoto#readme",
   "bugs": {
-    "url": "https://github.com/oc1s/somo/issues"
+    "url": "https://github.com/oc1s/somoto/issues"
   },
   "files": [
     "dist"

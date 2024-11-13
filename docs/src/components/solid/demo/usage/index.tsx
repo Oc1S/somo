@@ -7,7 +7,7 @@ function App() {
   return (
     <div>
       <Toaster />
-      <button onClick={() => toast('My first toast')}>
+      <button onClick={() => toast('Toast for you!')}>
         Give me a toast
       </button>
     </div>
