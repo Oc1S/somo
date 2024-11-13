@@ -1,16 +1,16 @@
 {
   "name": "somoto",
-  "version": "0.0.0",
+  "version": "0.0.2",
   "description": "SolidJS Motion Toast",
   "license": "MIT",
   "author": "Oc1s",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/oc1s/somoto.git"
+    "url": "git+https://github.com/oc1s/somo.git"
   },
-  "homepage": "https://github.com/oc1s/somoto#readme",
+  "homepage": "https://github.com/oc1s/somo#readme",
   "bugs": {
-    "url": "https://github.com/oc1s/somoto/issues"
+    "url": "https://github.com/oc1s/somo/issues"
   },
   "files": [
     "dist"

@@ -35,4 +35,4 @@ function App() {
 
 ## Documentation
 
-Find API references in the [doc](https://oc1s.github.io/somo/).
+Find API references in the [doc](https://oc1s.github.io/somo/getting-started/).
