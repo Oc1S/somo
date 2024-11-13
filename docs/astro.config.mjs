@@ -8,6 +8,8 @@ console.log(`🚀 ${pkg.name} v${pkg.version} - ${pkg.description}`);
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://oc1s.github.io',
+  base: 'somo',
   integrations: [
     starlight({
       title: 'Somoto',
